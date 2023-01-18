@@ -1,0 +1,85 @@
+﻿@using Garage3.Core
+
+@model IEnumerable<Garage3.Core.Vehicle>
+
+@{
+    ViewData["Title"] = "Parray";
+}
+
+<h3>P-rutor</h3>
+
+<ul class="nav m-lg-auto">
+@for (int i = 1; i <= Auxiliary.Capacity.Count(); i++)
+{
+        <li style="width: 80px; height: 40px; font-size: 10px; border: 1px solid; margin: 5px">
+            &nbsp;@i &nbsp;<div style="font-size: 11px; font-weight: bold; text-align: center; position: relative; top: -4px">@Auxiliary.Capacity[i-1]</div>
+        </li>   
+}
+</ul>
+
+<br />
+<br />
+<br />
+<h4><i>Det totala antalet registrerade fordon</i></h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Namn
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.RegNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vtype)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vmodel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsParked)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InCome)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Members.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Members.MemberNo)
+                </td>                
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vtype.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vmodel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsParked)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InCome)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,102 @@
+﻿@using Garage3.Core
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Garage3BL</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BL GARAGE</a>
+                <ul class="nav m-lg-auto">
+
+                    @if (Auxiliary.Start)
+                    {
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">G</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">P ■</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">Parkera</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">Medlemmar</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">Bli medlem</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">Ditt fordon</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">+</a></li>
+
+                    }
+                    else
+                    {
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Index">G</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Parray">P ■</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Parking">Parkera</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Members" asp-action="Index">Medlemmar</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Members" asp-action="Create">Bli medlem</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Cregcom">Ditt fordon</a></li>
+                        <li><a type="button" class="m-2 btn btn-outline-light" asp-controller="Vehicles" asp-action="Plus">+</a></li>
+                    }
+
+                </ul>
+                <ul class="nav m-lg-auto">
+                    <li>
+                        <span id="PARK" class="text-dark normal">@Auxiliary.Counter tagna av @Auxiliary.Capacity.Count() platser</span>
+                    </li>
+                </ul>
+                <ul class="nav m-lg-auto">
+                    <li>
+                        <form asp-action="SearchSort" asp-controller="Vehicles" method="get">
+                            <span class="nav m-lg-auto input-group">
+                                <input type="text" name="searchString" class="form-control" placeholder="Typ- eller Regnr" />
+                                <span class="nav m-lg-auto input-group-append">
+
+                                    @if (Auxiliary.Start)
+                                    {
+                                        <button type="button" class="btn m-lg-auto btn-outline-light">Sök</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn m-lg-auto btn-outline-light">Sök</button>
+                                    }
+
+                                </span>
+                            </span>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3 m-2">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - Garage3BL ♣ By Björn Lindqvist
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+@{
+    if (Auxiliary.Counter >= Auxiliary.Capacity.Count()) // När garaget är fullt växlar ramen till rött.
+    {
+        <script>
+            document.getElementById("PARK").className = "nav-link text-dark equalwarning";
+        </script>
+    }
+    else
+    {
+        <script>
+            document.getElementById("PARK").className = "nav-link text-dark normal";
+        </script>
+    }
+}

@@ -1,0 +1,144 @@
+﻿@using Garage3.Core
+
+@model Garage3.Core.Vtype
+
+@{
+    ViewData["Title"] = "Plus";
+}
+
+<h3>Statistik</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Statistic.nBilar
+            </th>
+            <th>
+                @Statistic.nMcyklar
+            </th>
+            <th>
+                @Statistic.nLbilar
+            </th>
+            <th>
+                @Statistic.nBussar
+            </th>
+            <th>
+                @Statistic.nTraktorer
+            </th>
+            <th>
+                @Statistic.nEmaskiner
+            </th>
+            <th>
+                @Statistic.nHjul
+            </th>
+            <th>
+                @Statistic.nInCome
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                &nbsp;@Statistic.Bilar
+            </td>
+            <td>
+                &nbsp;@Statistic.Mcyklar
+            </td>
+            <td>
+                &nbsp;@Statistic.Lbilar
+            </td>
+            <td>
+                &nbsp;@Statistic.Bussar
+            </td>
+            <td>
+                &nbsp;@Statistic.Traktorer
+            </td>
+            <td>
+                &nbsp;@Statistic.Emaskiner
+            </td>
+            <td>
+                &nbsp;@Statistic.Hjul
+            </td>
+            <td>
+                &nbsp;@Statistic.InCome kr
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Inställningar</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Plus">
+            <div class="form-group s">
+                <label class="control-label">Implementera ny kapacitet (max antal P-platser):</label>
+                <input type="number" name="capacity" class="form-control" min="5" />
+            </div>
+            <br />
+            <div class="form-group">
+                <button id="BTN" type="button" class="btn btn-primary">OK</button>
+            </div>
+            <br />
+            <div id="in_form" class="form-group hide">
+                <input type="submit" name="subcap" value="UTFÖR RADERING" class="btn btn-danger">
+            </div>
+            <br />
+        </form>
+        <form asp-action="Plus">
+            <div class="form-group">
+                <label class="control-label">Nytt grundbasbelopp (Nu: @Auxiliary.Pricebase kronor):</label>
+                <input type="number" name="baseprice" class="form-control" min="0" />
+            </div>
+            <div class="form-group">
+                <input type="submit" name="subbas" value="Nytt basbelopp" class="btn btn-warning btn-sm m-1">
+            </div>
+            <br />
+        </form>
+        <form asp-action="Plus">
+            <div class="form-group">
+                <label class="control-label">Nytt timpris (Nu: @Auxiliary.Pricehour kronor):</label>
+                <input type="number" name="timprice" class="form-control" min="0" />
+            </div>
+            <div class="form-group">
+                <input type="submit" name="subtim" value="Nytt timpris" class="btn btn-warning btn-sm m-1">
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="checkbox" name="M3M" value="Yes" class="form-check-input " />
+                <label class="control-label"> Spara utrymme (3 cyklar i en p-ruta):</label>
+            </div>
+            <br />
+        </form>
+        <form asp-action="Vehicleadd">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+                <input type="submit" value="Lägg till ny fordonstyp" class="btn btn-warning btn-sm m-1" />
+                <input type="submit" value="Ladda med standardfordonstyper" class="btn btn-danger btn-sm m-1" />
+            </div>
+        </form>
+    </div>
+    <div class="md-4">
+        <br />
+        <h5 style="color: orangered">@Auxiliary.Operation</h5> @*Meddelande*@
+    </div>
+</div>
+
+@{
+    <script>
+        /*Säkerhetsåtgärd för att undvika att radera databasen av misstag*/
+        let newcap = false;
+
+        const comBut = document.getElementById('BTN');
+        comBut.onmouseup = openSubmit;
+
+        function openSubmit() {
+            if (confirm("Detta kommer att radera alla fordon i databasen...")) newcap = true;
+            if (newcap) document.getElementById("in_form").className = "form-group show"; /*Byter klass*/
+        }
+    </script>
+}

@@ -1,0 +1,66 @@
+﻿@using Garage3.Core
+
+@model IEnumerable<Garage3.Core.Member>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Registrerade medlemmar</h2>
+
+<h4 style="color: violet">@Auxiliary.Thanks</h4> @*Meddelande*@
+<h5 style="color: green ">@Auxiliary.Operation</h5> @*Meddelande*@
+
+<form asp-action="Search" asp-controller="Members" method="get">
+    <span class="nav m-lg-auto input-group">
+        <input type="text" name="searchString" class="form-control" placeholder="Namn eller ID" />
+        <span class="nav m-lg-auto input-group-append">
+            <button type="submit" class="btn m-lg-auto btn-outline-dark">Sök</button>
+        </span>
+    </span>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MemberNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                Personnummer
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MemberNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PersonalNo)
+            </td>
+            <td>
+                <button type="button" class="abutt"><a class="alink" asp-action="Edit" asp-route-id="@item.Id">Ändra</a></button>
+                <button type="button" class="abutt"><a class="alink" asp-action="Details" asp-route-id="@item.Id">Info</a></button>
+                <button type="button" class="abutt"><a class="alink" asp-action="Delete" asp-route-id="@item.Id">Ta bort</a></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@Html.ValidationMessage("CustomError")

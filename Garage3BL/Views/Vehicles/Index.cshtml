@@ -1,0 +1,121 @@
+﻿@using Garage3.Core
+
+@model IEnumerable<Garage3.Core.Vehicle>
+
+@{    
+    ViewData["Title"] = "Index";
+}
+
+<h2>Fordon i garaget</h2>
+
+<h4 style="color: violet">@Auxiliary.Thanks</h4> @*Meddelande*@
+<h5 style="color: green ">@Auxiliary.Operation</h5> @*Meddelande*@
+<h5 style="color: orangered">@Auxiliary.Fullt</h5> @*Meddelande*@
+
+<table class="table">
+    <thead>
+        <tr>            
+            <th>
+                Namn
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Members.MemberNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vtype)
+                <a href="@Url.Action("SearchSort", new {sortOrder=ViewBag.TypeSort})">
+                    <img src="@Url.Content("../images/UpDownArrow.png")" id="arrows" alt="arrows" />
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegNo)
+                <a href="@Url.Action("SearchSort", new {sortOrder=ViewBag.RegnoSort})">
+                <img src="@Url.Content("../images/UpDownArrow.png")" id="arrows" alt="arrows" />
+                </a>
+            </th>                                    
+            <th>
+                @Html.DisplayNameFor(model => model.ArrivalTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParkedTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Place)
+            </th>            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            if (item.IsParked)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Members.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Members.MemberNo)
+                    </td>
+                    <td>
+                        @if (item.VtypeId == 1)
+                        {
+                            <span>Bil</span>
+                        }
+                        @if (item.VtypeId == 2)
+                        {
+                            <span>Motorcykel</span>
+                        }
+                        @if (item.VtypeId == 3)
+                        {
+                            <span>Lastbil</span>
+                        }
+                        @if (item.VtypeId == 4)
+                        {
+                            <span>Buss</span>
+                        }
+                        @if (item.VtypeId == 5)
+                        {
+                            <span>Traktor</span>
+                        }
+                        @if (item.VtypeId == 6)
+                        {
+                            <span>Entreprenadmaskin</span>
+                        }
+                        @if (item.VtypeId > 6)
+                        {
+                            <span>Annat fordon</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegNo)
+                    </td>                                
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArrivalTime)                
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ParkedTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Place)
+                    </td>
+                    <td>
+                        <button type="button" class="abutt"><a class="alink" asp-action="Edit" asp-route-id="@item.Id">Ändra</a></button>
+                        <button type="button" class="abutt"><a class="alink" asp-action="Details" asp-route-id="@item.Id">Info</a></button>
+                        <button type="button" class="abutt"><a class="alink" asp-action="Delete" asp-route-id="@item.Id">Checka ut</a></button>
+                    </td>
+                </tr>
+            }
+}
+    </tbody>
+    @*<tbody>
+    @for (int i = 0; i < Auxiliary.Capacity.Length; i++) // För test av arrayen Capacity.
+    {
+    <tr>
+    <td>
+    @Auxiliary.Capacity[i]
+    </td>
+    </tr>
+    }
+    </tbody>*@
+</table>
+
+@Html.ValidationMessage("CustomError")

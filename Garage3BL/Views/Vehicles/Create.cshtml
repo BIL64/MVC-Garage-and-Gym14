@@ -1,0 +1,116 @@
+﻿@using Garage3.Core
+
+@model Garage3.Core.Vehicle
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Registrera fordon</h2>
+
+<h4 style="color: violet">@Auxiliary.Thanks</h4> @*Meddelande*@
+
+<h5>--@TempData["bjorn"]--</h5>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="VtypeId" class="control-label"></label>
+                <select asp-for="VtypeId" class="form-control" asp-items="ViewBag.VtypeId"></select>
+                <span asp-validation-for="VtypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" asp-for="MemberId" value="@TempData["memid"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.MemberNo" value="@TempData["memno"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.FirstName" value="@TempData["memfn"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.LastName" value="@TempData["memln"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.FullName" value="@TempData["memfu"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.PersonalNo" value="@TempData["mempn"]" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Members.Vehicles" value="@TempData["memve"]" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RegNo" class="control-label"></label>
+                <input asp-for="RegNo" class="form-control" />
+                <span asp-validation-for="RegNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Vmodel" class="control-label"></label>
+                <input asp-for="Vmodel" class="form-control" />
+                <span asp-validation-for="Vmodel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color" class="control-label"></label>
+                <input asp-for="Color" class="form-control" />
+                <span asp-validation-for="Color" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Wheels" class="control-label"></label>
+                <input asp-for="Wheels" class="form-control" />
+                <span asp-validation-for="Wheels" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="Place" class="control-label"></label>*@
+                <input type="hidden" asp-for="Place" value="[0]" class="form-control" />
+                @*<span asp-validation-for="Place" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                @*<label asp-for="ArrivalTime" class="control-label"></label>*@
+                <input type="hidden" asp-for="ArrivalTime" value="@DateTime.Now" class="form-control" />
+                @*<span asp-validation-for="ArrivalTime" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                @*<label asp-for="ParkedTime" class="control-label"></label>*@
+                <input type="hidden" asp-for="ParkedTime" value="0:0:0" class="form-control" />
+                @*<span asp-validation-for="ParkedTime" class="text-danger"></span>*@
+            </div>
+            <div class="form-group form-check">
+                @*<label class="form-check-label">*@
+                    <input type="hidden" class="form-check-input" asp-for="IsParked" value="false" /> @*Html.DisplayNameFor(model => model.IsParked)*@
+                @*</label>*@
+            </div>
+            <div class="form-group">
+                @*<label asp-for="InCome" class="control-label"></label>*@
+                <input type="hidden" asp-for="InCome" value="0" class="form-control" />
+                @*<span asp-validation-for="InCome" class="text-danger"></span>*@
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="md-4">
+        <br />
+        <h5 style="color: green ">@Auxiliary.Operation</h5> @*Meddelande*@
+        <h5 style="color: orangered">@Auxiliary.WarningReg</h5> @*Meddelande*@
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

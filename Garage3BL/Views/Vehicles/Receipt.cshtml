@@ -1,0 +1,52 @@
+﻿@model Garage3.Core.Receipt
+
+@{
+    ViewData["Title"] = "Receipt";
+}
+
+<h2>Kvitto</h2>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegNo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegNo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Vtype)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Vtype)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeEnter)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeEnter)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeExit)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeExit)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PriceTotal)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PriceTotal)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Gå tillbaka</a>
+</div>
