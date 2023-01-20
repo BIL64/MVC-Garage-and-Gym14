@@ -605,8 +605,6 @@ namespace Garage3BL.Controllers
             }
 
             vehicle.Members.Vehicles.Add(vehicle);
-            vehicle.MemberId = id - 1;
-            vehicle.VtypeId = id - 1;
 
             try
             {
