@@ -37,7 +37,7 @@ namespace Garage3.Core
         [DisplayFormat(DataFormatString = "{0:%d}d {0:%h}t {0:%m}m")]
         public TimeSpan ParkedTime { get; set; }
 
-        [Display(Name = "Parkerad?")]
+        [Display(Name = "P")]
         public bool IsParked { get; set; }
 
         [Display(Name = "Intäkter")]

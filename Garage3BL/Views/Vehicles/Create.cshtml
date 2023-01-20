@@ -16,39 +16,16 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
+            <div class="form-group">
                 <label asp-for="MemberId" class="control-label"></label>
                 <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
                 <span asp-validation-for="MemberId" class="text-danger"></span>
-            </div>*@
+            </div>
             <div class="form-group">
                 <label asp-for="VtypeId" class="control-label"></label>
                 <select asp-for="VtypeId" class="form-control" asp-items="ViewBag.VtypeId"></select>
                 <span asp-validation-for="VtypeId" class="text-danger"></span>
             </div>
-
-            <div class="form-group">
-                <input type="hidden" asp-for="MemberId" value="@TempData["memid"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.MemberNo" value="@TempData["memno"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.FirstName" value="@TempData["memfn"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.LastName" value="@TempData["memln"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.FullName" value="@TempData["memfu"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.PersonalNo" value="@TempData["mempn"]" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Members.Vehicles" value="@TempData["memve"]" class="form-control" />
-            </div>
-
             <div class="form-group">
                 <label asp-for="RegNo" class="control-label"></label>
                 <input asp-for="RegNo" class="form-control" />
@@ -74,34 +51,11 @@
                 <input asp-for="Wheels" class="form-control" />
                 <span asp-validation-for="Wheels" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                @*<label asp-for="Place" class="control-label"></label>*@
-                <input type="hidden" asp-for="Place" value="[0]" class="form-control" />
-                @*<span asp-validation-for="Place" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                @*<label asp-for="ArrivalTime" class="control-label"></label>*@
-                <input type="hidden" asp-for="ArrivalTime" value="@DateTime.Now" class="form-control" />
-                @*<span asp-validation-for="ArrivalTime" class="text-danger"></span>*@
-            </div>
-            <div class="form-group">
-                @*<label asp-for="ParkedTime" class="control-label"></label>*@
-                <input type="hidden" asp-for="ParkedTime" value="0:0:0" class="form-control" />
-                @*<span asp-validation-for="ParkedTime" class="text-danger"></span>*@
-            </div>
-            <div class="form-group form-check">
-                @*<label class="form-check-label">*@
-                    <input type="hidden" class="form-check-input" asp-for="IsParked" value="false" /> @*Html.DisplayNameFor(model => model.IsParked)*@
-                @*</label>*@
-            </div>
-            <div class="form-group">
-                @*<label asp-for="InCome" class="control-label"></label>*@
-                <input type="hidden" asp-for="InCome" value="0" class="form-control" />
-                @*<span asp-validation-for="InCome" class="text-danger"></span>*@
-            </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Spara" class="btn btn-primary" />
             </div>
+
         </form>
     </div>
     <div class="md-4">

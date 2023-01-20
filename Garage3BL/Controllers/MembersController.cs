@@ -23,11 +23,25 @@ namespace Garage3BL.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Member != null ? 
-                          View(await _context.Member.ToListAsync()) :
-                          Problem("Entity set 'Garage3BLContext.Member'  is null.");
+            var model = _context.Member
+                .Select(v => new Member
+                {
+                    Id = v.Id,
+                    MemberNo = v.MemberNo,
+                    FirstName = v.FirstName,
+                    LastName = v.LastName,
+                    PersonalNo = v.PersonalNo,
+                }); //.Distinct(); //.OrderBy(v => v.FirstName);
+
+            model = model.Distinct(); //OrderBy(v => v.FirstName);
+            //model = model.GroupBy(v => v.FirstName).OrderBy(v => v).Select(y => y.First());
+            return View("Index", model);
+
+            //return _context.Member != null ? 
+            //            View(await model.ToListAsync(), model) :
+            //            Problem("Entity set 'Garage3BLContext.Member'  is null.");
         }
 
         // Av Anna Vesslén
@@ -98,15 +112,8 @@ namespace Garage3BL.Controllers
                 {                                        
                     _context.Add(member);
                     await _context.SaveChangesAsync();
-                    TempData["memid"] = (int)member.Id;
-                    TempData["memno"] = member.MemberNo.ToString();
-                    TempData["memfn"] = member.FirstName.ToString();
-                    TempData["memln"] = member.LastName.ToString();
-                    TempData["memfu"] = member.FullName.ToString();
-                    TempData["mempn"] = member.PersonalNo.ToString();
-                    TempData["bjorn"] = (int)member.Id; // test
                     Auxiliary.Thanks = $"{member.FullName} är nu medlem i BL GARAGE !";                    
-                    return RedirectToAction("Create", "Vehicles");
+                    return RedirectToAction(nameof(Index));
                 }
                 Auxiliary.WarningName = "ModelState is not valid...";
                 return View(member);
