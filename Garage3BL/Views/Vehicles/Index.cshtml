@@ -56,34 +56,7 @@
                         @Html.DisplayFor(modelItem => item.Members.MemberNo)
                     </td>
                     <td>
-                        @if (item.VtypeId == 1)
-                        {
-                            <span>Bil</span>
-                        }
-                        @if (item.VtypeId == 2)
-                        {
-                            <span>Motorcykel</span>
-                        }
-                        @if (item.VtypeId == 3)
-                        {
-                            <span>Lastbil</span>
-                        }
-                        @if (item.VtypeId == 4)
-                        {
-                            <span>Buss</span>
-                        }
-                        @if (item.VtypeId == 5)
-                        {
-                            <span>Traktor</span>
-                        }
-                        @if (item.VtypeId == 6)
-                        {
-                            <span>Entreprenadmaskin</span>
-                        }
-                        @if (item.VtypeId > 6)
-                        {
-                            <span>Annat fordon</span>
-                        }
+                        @Html.DisplayFor(modelItem => item.Vtype.Type)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.RegNo)

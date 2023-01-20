@@ -461,7 +461,7 @@ namespace Garage3BL.Controllers
                         Statistic.InCome += park.InCome;
                         break;
                 }
-                Auxiliary.Thanks = $"Tack för att du {park.RegNo} parkerat hos BL GARAGE !";
+                Auxiliary.Thanks = $"Tack {park.Members.FullName} för att du parkerat hos BL GARAGE !";
             }
             else
             {
@@ -485,28 +485,23 @@ namespace Garage3BL.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Parking(Vehicle vehicle)
-        //public IActionResult Parking([Bind("Id,RegNo,MemberId,VtypeId")] Vehicle vehicle)
         {
             bool flag1 = _context.Member.Any(p => p.Id == vehicle.MemberId); // Finns denna medlem?
             vehicle.RegNo = vehicle.RegNo.ToUpper(); // Tvingar till versaler.
-            bool flag2 = _context.Vehicle.Any(p => p.RegNo.ToUpper() == vehicle.RegNo); // Har medlemmen detta fordon (regnummer)?
+            bool flag2 = _context.Vehicle.Any(p => p.RegNo.ToUpper() == vehicle.RegNo); // Har medlemmen detta fordon (regnummer)?            
 
             if (flag1 && flag2)
             {
-                vehicle.IsParked = true;
-                vehicle.ArrivalTime = DateTime.Now;
-                vehicle.ParkedTime = DateTime.Now.Subtract(vehicle.ArrivalTime);                
-                vehicle.InCome += Auxiliary.Pricebase;
-                Statistic.InCome += vehicle.InCome;
-                Parking_in(vehicle); // Försöker att parkera ett fordon.
-
-                _context.Attach(vehicle);
-                _context.Entry(vehicle).Property("IsParked").IsModified = true;
-                _context.Entry(vehicle).Property("ArrivalTime").IsModified = true;
-                _context.Entry(vehicle).Property("ParkedTime").IsModified = true;
-                _context.Entry(vehicle).Property("InCome").IsModified = true;
-                _context.Entry(vehicle).Property("Place").IsModified = true;
-                //_context.Entry(vehicle).State = EntityState.Modified;
+                foreach (var item in _context.Vehicle)
+                {
+                    if (vehicle.RegNo == item.RegNo)
+                    {
+                        item.IsParked = true;
+                        item.ArrivalTime = DateTime.Now;
+                        item.ParkedTime = DateTime.Now.Subtract(item.ArrivalTime);
+                        Parking_in(item); // Försöker att parkera ett fordon.
+                    }
+                }
                 await _context.SaveChangesAsync();                
                 return RedirectToAction(nameof(Index));
             }
@@ -518,7 +513,6 @@ namespace Garage3BL.Controllers
                 return View(vehicle);
             }
         }
-        // [Bind("Id,RegNo,Brand,Vmodel,Color,Wheels,Place,ArrivalTime,ParkedTime,IsParked,InCome,MemberId,VtypeId")]
 
         // GET: Vehicles/Details/5
         public async Task<IActionResult> Details(int? id)
