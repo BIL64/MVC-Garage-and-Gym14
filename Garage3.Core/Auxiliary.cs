@@ -14,7 +14,9 @@ namespace Garage3.Core
 
         public static string WarningMember { get; set; } = string.Empty; // Felmeddelande om ej medlem.
 
-        public static string Thanks { get; set; } = string.Empty; // Tack för parkering.
+        public static string Thanks4P { get; set; } = string.Empty; // Tack för parkering.
+
+        public static string Thanks4R { get; set; } = string.Empty; // Tack för medlemskap.
 
         public static string Fullt { get; set; } = string.Empty; // Garaget är fullt.
 
@@ -35,7 +37,8 @@ namespace Garage3.Core
             WarningReg = string.Empty;
             WarningName = string.Empty;
             WarningMember = string.Empty;
-            Thanks = string.Empty;
+            Thanks4P = string.Empty;
+            Thanks4R = string.Empty;
             Fullt = string.Empty;
             Operation = string.Empty;
         }

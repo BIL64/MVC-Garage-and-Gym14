@@ -10,6 +10,7 @@ using Garage3BL.Data;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Garage3BL.Controllers
 {
@@ -113,7 +114,7 @@ namespace Garage3BL.Controllers
                 {                                        
                     _context.Add(member);
                     await _context.SaveChangesAsync();
-                    Auxiliary.Thanks = $"{member.FullName} är nu medlem i BL GARAGE !";                    
+                    Auxiliary.Thanks4R = $"{member.FullName} är nu medlem i BL GARAGE !";                    
                     return RedirectToAction(nameof(Index));
                 }
                 Auxiliary.WarningName = "ModelState is not valid...";
@@ -156,13 +157,22 @@ namespace Garage3BL.Controllers
                 return NotFound();
             }
 
+            foreach (var item in _context.Member)
+            {
+                if (member.PersonalNo == item.PersonalNo)
+                {
+                    item.MemberNo = member.MemberNo;
+                    item.FirstName = member.FirstName;
+                    item.LastName = member.LastName;
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
-                {
-                    _context.Update(member);
-                    Auxiliary.Operation = $"Redigeringen är genomförd...";
+                {                    
                     await _context.SaveChangesAsync();
+                    Auxiliary.Operation = $"Redigeringen är genomförd...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -204,19 +214,52 @@ namespace Garage3BL.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Member == null)
+            int tal = 0;
+
+            var mem1 = _context.Member
+                .Where(v => v.Id == id)
+                .Select(v => new Member
+                {
+                    Id = v.Id,
+                    PersonalNo = v.PersonalNo
+                });
+
+            var mem2 = _context.Member
+                .Select(v => new Member
+                {
+                    Id = v.Id,
+                    PersonalNo = v.PersonalNo
+                });
+
+            foreach (var item1 in mem1)
             {
-                return Problem("Entity set 'Garage3BLContext.Member'  is null.");
+                foreach (var item2 in mem2)
+                {
+                    if (item1.PersonalNo == item2.PersonalNo)
+                    {
+                        tal++;
+                    }
+                }
             }
+
             var member = await _context.Member.FindAsync(id);
-            if (member != null)
-            {
-                Auxiliary.Operation = $"{member.FullName} är avregistrerad...";
-                _context.Member.Remove(member);
+
+            if (tal < 2)
+            { 
+                if (_context.Member == null)
+                {
+                    return Problem("Entity set 'Garage3BLContext.Member'  is null.");
+                }
+                if (member != null)
+                {                
+                    _context.Member.Remove(member);
+                    Auxiliary.Operation = $"{member.MemberNo} är avregistrerad...";
+                }            
+                await _context.SaveChangesAsync();            
+                return RedirectToAction(nameof(Index));            
             }
-            
-            await _context.SaveChangesAsync();            
-            return RedirectToAction(nameof(Index));
+            Auxiliary.WarningName = "Alla fordon som tillhör en medlem måste först avregistreras innan medlemmen kan avregistreras...";
+            return View(member);
         }
 
         private bool MemberExists(int id)

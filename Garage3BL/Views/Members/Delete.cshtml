@@ -1,4 +1,6 @@
-﻿@model Garage3.Core.Member
+﻿@using Garage3.Core
+
+@model Garage3.Core.Member
 
 @{
     ViewData["Title"] = "Delete";
@@ -39,4 +41,9 @@
         <input type="submit" value="Avregistrera" class="btn btn-danger" />
         <a asp-action="Index"> Gå tillbaka</a>
     </form>
+</div>
+<div class="md-4">
+    <br />
+    <h5 style="color: orangered">@Auxiliary.WarningName</h5> @*Meddelande*@
+    <h5 style="color: green ">@Auxiliary.Operation</h5> @*Meddelande*@
 </div>

@@ -472,7 +472,7 @@ namespace Garage3BL.Controllers
                         Statistic.InCome += park.InCome;
                         break;
                 }
-                Auxiliary.Thanks = $"Tack {park.Members.FullName} för att du parkerat hos BL GARAGE !";
+                Auxiliary.Thanks4P = $"Tack {park.Members.FullName} för att du parkerar hos BL GARAGE !";
             }
             else
             {
@@ -657,15 +657,34 @@ namespace Garage3BL.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            int idmem = 0;
+            int vid = 0;
+
             if (_context.Vehicle == null)
             {
                 return Problem("Entity set 'Garage3BLContext.Vehicle'  is null.");
             }
-            var vehicle = await _context.Vehicle.FindAsync(id);
-            var member = await _context.Member.FindAsync(id);
-            var vtype = _context.Set<Vtype>().Find(id);
 
-            if (vehicle != null)
+            var mem = _context.Vehicle
+                .Where(v => v.Id == id)
+                .Select(v => new Vehicle
+                {
+                    Id = v.Id,
+                    MemberId = v.MemberId,
+                    VtypeId = v.VtypeId
+                });
+
+            foreach (var item in mem)
+            {
+                idmem = item.MemberId;
+                vid = item.VtypeId;
+            }
+
+            var vehicle = await _context.Vehicle.FindAsync(id);
+            var member = await _context.Member.FindAsync(idmem);
+            var vtype = _context.Set<Vtype>().Find(vid);
+
+            if (vehicle != null && member != null && vtype != null)
             {
                 if (!vehicle.IsParked)
                 {                    
@@ -679,7 +698,6 @@ namespace Garage3BL.Controllers
                     Auxiliary.WarningReg = $"{vehicle.RegNo} är parkerad och måste checkas ut innan avregistrering...";
                 }
             }
-
             await _context.SaveChangesAsync();
             return View(vehicle);
         }
