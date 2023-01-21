@@ -34,8 +34,7 @@ namespace Garage3.Core
         public DateTime ArrivalTime { get; set; }
 
         [Display(Name = "P-tid")]
-        [DisplayFormat(DataFormatString = "{0:%d}d {0:%h}t {0:%m}m")]
-        public TimeSpan ParkedTime { get; set; }
+        public string ParkedTime { get; set; } = string.Empty;
 
         [Display(Name = "P")]
         public bool IsParked { get; set; }
@@ -54,7 +53,7 @@ namespace Garage3.Core
         [Display(Name = "Fordonstyp int")]
         public int VtypeId { get; set; } // Typ av fordon int.
 
-        [Display(Name = "Id nummer")]
+        [Display(Name = "Din identifikation")]
         public int MemberId { get; set; } // Samma id som ägaren.
     }
 }

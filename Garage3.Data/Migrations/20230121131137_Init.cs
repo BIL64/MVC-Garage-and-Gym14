@@ -53,7 +53,7 @@ namespace Garage3.Data.Migrations
                     Wheels = table.Column<int>(type: "int", nullable: false),
                     Place = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ParkedTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    ParkedTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsParked = table.Column<bool>(type: "bit", nullable: false),
                     InCome = table.Column<int>(type: "int", nullable: false),
                     VtypeId = table.Column<int>(type: "int", nullable: false),

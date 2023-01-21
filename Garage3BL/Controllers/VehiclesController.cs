@@ -24,6 +24,15 @@ namespace Garage3BL.Controllers
         }
 
         // Av Björn Lindqvist
+        public string Ptime(DateTime arrival) // Levererar tidsintervallet.
+        {
+            int d = DateTime.Now.Subtract(arrival).Days;
+            int t = DateTime.Now.Subtract(arrival).Hours;
+            int m = DateTime.Now.Subtract(arrival).Minutes;
+            return $"{d}d {t}t {m}m";
+        }
+
+        // Av Björn Lindqvist
         public int Readfile2int(string filename, int intal) // Läser från konfigurationsfiler.
         {
             int tal = 0;
@@ -121,8 +130,9 @@ namespace Garage3BL.Controllers
                                 Statistic.InCome += item.InCome;
                                 break;
                         }
-                    }
-                    item.ParkedTime = DateTime.Now.Subtract(item.ArrivalTime); // För alla fordon ges P-tid.
+                    }                    
+                    item.ParkedTime = Ptime(item.ArrivalTime); // För alla fordon ges P-tid.
+
                 }
             }
             else
@@ -131,7 +141,7 @@ namespace Garage3BL.Controllers
 
                 foreach (var items in vehicle)
                 {
-                    items.ParkedTime = DateTime.Now.Subtract(items.ArrivalTime); // För alla fordon ges P-tid.
+                    items.ParkedTime = Ptime(items.ArrivalTime); // För alla fordon ges P-tid.
                 }
             }
             await _context.SaveChangesAsync();
@@ -139,7 +149,7 @@ namespace Garage3BL.Controllers
 
             var garage3BLContext = _context.Vehicle.Include(v => v.Members).Include(v => v.Vtype);
             return View(await garage3BLContext.ToListAsync());
-        }
+        }        
 
         // Av Anna Vesslén
         public IActionResult SearchSort(string sortOrder, string searchString)
@@ -271,7 +281,6 @@ namespace Garage3BL.Controllers
                 vtype.Type = newvehicle;
                 _context.Add(vtype);
                 await _context.SaveChangesAsync();
-                Auxiliary.Operation = "Ett nytt fordon har lagts till...";
                 return View("Plus");
             }
             return View("Plus");
@@ -343,7 +352,7 @@ namespace Garage3BL.Controllers
 
             vehicle.Place = "[0]";
             vehicle.ArrivalTime = DateTime.Now;
-            vehicle.ParkedTime = DateTime.Now.Subtract(vehicle.ArrivalTime);
+            vehicle.ParkedTime = Ptime(vehicle.ArrivalTime);
             vehicle.IsParked = false;                       
 
             vehicle.Members.Vehicles.Add(vehicle);
@@ -355,6 +364,8 @@ namespace Garage3BL.Controllers
             {
                 _context.Add(vehicle);
                 await _context.SaveChangesAsync();
+                ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", vehicle.MemberId);
+                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
                 Auxiliary.Operation = "Ditt fordon är nu inregistrerat...";
                 return View(vehicle);
             }
@@ -498,7 +509,7 @@ namespace Garage3BL.Controllers
                     {
                         item.IsParked = true;
                         item.ArrivalTime = DateTime.Now;
-                        item.ParkedTime = DateTime.Now.Subtract(item.ArrivalTime);
+                        item.ParkedTime = Ptime(item.ArrivalTime);
                         Parking_in(item); // Försöker att parkera ett fordon.
                     }
                 }
@@ -651,18 +662,83 @@ namespace Garage3BL.Controllers
                 return Problem("Entity set 'Garage3BLContext.Vehicle'  is null.");
             }
             var vehicle = await _context.Vehicle.FindAsync(id);
+            var member = await _context.Member.FindAsync(id);
+            var vtype = _context.Set<Vtype>().Find(id);
+
             if (vehicle != null)
             {
-                int antalreg = Auxiliary.Capacity.Count(c => c == vehicle.RegNo); // Räknar hur många gånger ett regnr förekommer i arrayen.
-                Auxiliary.Counter -= antalreg;
-
-                for (int i = 0; i < antalreg; i++)
-                {
-                    Auxiliary.Capacity[Array.IndexOf(Auxiliary.Capacity, vehicle.RegNo)] = ""; // Tar bort alla regnr från arrayen.
+                if (!vehicle.IsParked)
+                {                    
+                    _context.Vehicle.Remove(vehicle);
+                    _context.Member.Remove(member);
+                    _context.Set<Vtype>().Remove(vtype);
+                    Auxiliary.Operation = $"{vehicle.RegNo} är avregistrerad...";
                 }
-                Auxiliary.Operation = $"{vehicle.RegNo} har checkat ut...";
+                else
+                {
+                    Auxiliary.WarningReg = $"{vehicle.RegNo} är parkerad och måste checkas ut innan avregistrering...";
+                }
+            }
 
-                _context.Vehicle.Remove(vehicle);
+            await _context.SaveChangesAsync();
+            return View(vehicle);
+        }
+
+        private bool VehicleExists(int id)
+        {
+          return (_context.Vehicle?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public void Parking_out(Vehicle park) // Sköter utparkering.
+        {
+            int antalreg = Auxiliary.Capacity.Count(c => c == park.RegNo); // Räknar hur många gånger ett regnr förekommer i arrayen.
+            Auxiliary.Counter -= antalreg;
+
+            for (int i = 0; i < antalreg; i++)
+            {
+                Auxiliary.Capacity[Array.IndexOf(Auxiliary.Capacity, park.RegNo)] = ""; // Tar bort alla regnr från arrayen.
+            }
+            park.Place = string.Empty;
+            park.IsParked = false;
+        }
+
+        // GET: Vehicles/Delete/5 (ändring: Björn Lindqvist)
+        public async Task<IActionResult> Unparking(int? id)
+        {
+            if (id == null || _context.Vehicle == null)
+            {
+                return NotFound();
+            }
+
+            Auxiliary.Reset(); // Raderar alla meddelanden.
+            var vehicle = await _context.Vehicle
+                .Include(v => v.Members)
+                .Include(v => v.Vtype)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            return View(vehicle);
+        }
+
+        // POST: Vehicles/Delete/5 (ändring: Sorosh Farahmand och Björn Lindqvist)
+        [HttpPost, ActionName("Unparking")]
+        [ValidateAntiForgeryToken]
+        // Av Björn Lindqvist)
+        public async Task<IActionResult> Unparking(int id)
+        {
+            if (_context.Vehicle == null)
+            {
+                return Problem("Entity set 'Garage3BLContext.Vehicle'  is null.");
+            }
+            var vehicle = await _context.Vehicle.FindAsync(id);
+
+            if (vehicle != null)
+            {
+                Parking_out(vehicle);
+                Auxiliary.Operation = $"{vehicle.RegNo} checkade precis ut - Välkommen åter!";
 
                 var price = Auxiliary.Pricehour;
 
@@ -684,12 +760,7 @@ namespace Garage3BL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleExists(int id)
-        {
-          return (_context.Vehicle?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
-
-        // Av Sorosh Farahmand
+        // Av Sorosh Farahmand och Björn Lindqvist
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Receipt(int id)
@@ -707,17 +778,8 @@ namespace Garage3BL.Controllers
                 return NotFound();
             }
 
-            int antalreg = Auxiliary.Capacity.Count(c => c == vehicle.RegNo); // Räknar hur många gånger ett regnr förekommer i arrayen.
-            Auxiliary.Counter -= antalreg;
-
-            for (int i = 0; i < antalreg; i++)
-            {
-                Auxiliary.Capacity[Array.IndexOf(Auxiliary.Capacity, vehicle.RegNo)] = ""; // Tar bort alla regnr från arrayen.
-            }
-            Auxiliary.Operation = "Det aktuella fordonet har checkat ut...";
-
-            _context.Vehicle.Remove(vehicle);
-            await _context.SaveChangesAsync();
+            Parking_out(vehicle);
+            Auxiliary.Operation = $"{vehicle.RegNo} checkade precis ut - Välkommen åter!";
 
             var price = Auxiliary.Pricehour;
 
@@ -742,6 +804,7 @@ namespace Garage3BL.Controllers
             Statistic.InCome += model.PriceTotal;
             vehicle.InCome += model.PriceTotal;
 
+            await _context.SaveChangesAsync();
             return View(model);
         }
     }

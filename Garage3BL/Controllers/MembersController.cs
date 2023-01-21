@@ -23,9 +23,10 @@ namespace Garage3BL.Controllers
         }
 
         // GET: Members
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = _context.Member
+                .Distinct()
                 .Select(v => new Member
                 {
                     Id = v.Id,
@@ -35,13 +36,13 @@ namespace Garage3BL.Controllers
                     PersonalNo = v.PersonalNo,
                 }); //.Distinct(); //.OrderBy(v => v.FirstName);
 
-            model = model.Distinct(); //OrderBy(v => v.FirstName);
+            //OrderBy(v => v.FirstName);
             //model = model.GroupBy(v => v.FirstName).OrderBy(v => v).Select(y => y.First());
-            return View("Index", model);
+            //return View("Index", model);
 
-            //return _context.Member != null ? 
-            //            View(await model.ToListAsync(), model) :
-            //            Problem("Entity set 'Garage3BLContext.Member'  is null.");
+            return _context.Member != null ? 
+                        View(await model.ToListAsync()) :
+                        Problem("Entity set 'Garage3BLContext.Member'  is null.");
         }
 
         // Av Anna Vesslén

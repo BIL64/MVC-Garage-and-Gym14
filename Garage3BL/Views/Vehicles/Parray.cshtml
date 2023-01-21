@@ -79,6 +79,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.InCome)
                 </td>
+                <td>
+                    <button type="button" class="abutt"><a class="alink" asp-action="Edit" asp-route-id="@item.Id">Ändra</a></button>
+                    <button type="button" class="abutt"><a class="alink" asp-action="Details" asp-route-id="@item.Id">Info</a></button>
+                    <button type="button" class="abutt"><a class="alink" asp-action="Delete" asp-route-id="@item.Id">Avregistrera</a></button>
+                </td>
             </tr>
         }
     </tbody>

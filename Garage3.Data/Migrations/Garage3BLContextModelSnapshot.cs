@@ -85,8 +85,9 @@ namespace Garage3.Data.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("ParkedTime")
-                        .HasColumnType("time");
+                    b.Property<string>("ParkedTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Place")
                         .IsRequired()
