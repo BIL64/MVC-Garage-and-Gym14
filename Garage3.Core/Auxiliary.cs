@@ -22,6 +22,8 @@ namespace Garage3.Core
 
         public static string Operation { get; set; } = string.Empty; // Operation genomförd.
 
+        public static int Rak { get; set; } = 1; // Räknar upp i views.
+
         public static int Pricebase { get; set; } = 10; // Grundpriset. Config_bas.txt.
 
         public static int Pricehour { get; set; } = 20; // Priset per timme. Config_tim.txt.
@@ -41,6 +43,7 @@ namespace Garage3.Core
             Thanks4R = string.Empty;
             Fullt = string.Empty;
             Operation = string.Empty;
+            Rak = 1;
         }
 
         public static void ArrayReset(int cap) // Laddar den initierade arrayen med tomma poster.

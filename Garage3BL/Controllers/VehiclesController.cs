@@ -357,7 +357,7 @@ namespace Garage3BL.Controllers
                 await _context.SaveChangesAsync();
                 ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", vehicle.MemberId);
                 ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
-                Auxiliary.Operation = "Ditt fordon är nu inregistrerat...";
+                Auxiliary.Operation = $"Ditt fordon nr {Auxiliary.Rak++} är nu inregistrerat...";
                 return View(vehicle);
             }
             else
@@ -454,7 +454,7 @@ namespace Garage3BL.Controllers
                         park.InCome += (int)(Auxiliary.Pricebase * 1.6);
                         Statistic.InCome += park.InCome;
                         break;
-                    case "Traktor" or "entreprenadmaskin":
+                    case "Traktor" or "Entreprenadmaskin":
                         Auxiliary.Counter += 2;
                         Auxiliary.Capacity[rak - 2] = park.RegNo;
                         park.Place = "[" + (rak - 1).ToString() + "] ";
@@ -665,6 +665,7 @@ namespace Garage3BL.Controllers
             }
             else
             {
+                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
                 Auxiliary.WarningReg = "Fordonet måste checka ut först innan någon ändring kan göras...";
                 return View(vehicle);
             }
@@ -698,7 +699,7 @@ namespace Garage3BL.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             int idmem = 0;
-            int vid = 0;
+            //int vid = 0;
 
             if (_context.Vehicle == null)
             {
@@ -717,28 +718,28 @@ namespace Garage3BL.Controllers
             foreach (var item in mem)
             {
                 idmem = item.MemberId;
-                vid = item.VtypeId;
+                //vid = item.VtypeId; <-- finns det en bättre metod?
             }
 
             var vehicle = await _context.Vehicle.FindAsync(id);
             var member = await _context.Member.FindAsync(idmem);
-            var vtype = _context.Set<Vtype>().Find(vid);
+            //var vtype = _context.Set<Vtype>().Find(vid);
 
-            if (vehicle != null && member != null && vtype != null)
+            if (vehicle != null && member != null)
             {
                 if (!vehicle.IsParked)
                 {                    
                     _context.Vehicle.Remove(vehicle);
                     _context.Member.Remove(member);
-                    _context.Set<Vtype>().Remove(vtype);
+                    //_context.Set<Vtype>().Remove(vtype); <-- finns det en bättre metod?
+                    await _context.SaveChangesAsync();
                     Auxiliary.Operation = $"{vehicle.RegNo} är avregistrerad...";
                 }
                 else
                 {
                     Auxiliary.WarningReg = $"{vehicle.RegNo} är parkerad och måste checkas ut innan avregistrering...";
                 }
-            }
-            await _context.SaveChangesAsync();
+            }            
             return View(vehicle);
         }
 
@@ -756,7 +757,7 @@ namespace Garage3BL.Controllers
             {
                 Auxiliary.Capacity[Array.IndexOf(Auxiliary.Capacity, park.RegNo)] = ""; // Tar bort alla regnr från arrayen.
             }
-            park.Place = string.Empty;
+            park.Place = "[0]";
             park.IsParked = false;
         }
 
@@ -812,9 +813,9 @@ namespace Garage3BL.Controllers
                 };
                 Statistic.InCome += model.PriceTotal;
                 vehicle.InCome += model.PriceTotal;
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
+            
             return RedirectToAction(nameof(Index));
         }
 
