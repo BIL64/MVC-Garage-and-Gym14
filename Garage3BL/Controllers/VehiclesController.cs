@@ -485,8 +485,9 @@ namespace Garage3BL.Controllers
         //GET: Vehicles/Parking
         public IActionResult Parking()
         {
-            //Auxiliary.Reset(); // Raderar alla meddelanden.
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo");
+            //var names = _context.Member.Distinct().Select(s => s.PersonalNo);//.Select(n => new { FirstName = n }).ToList();
+            //ViewData["MemberId"] = new SelectList(names, "Id", "MemberNo");
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo").Distinct().ToList();
             ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo");
             return View();
         }
@@ -543,7 +544,11 @@ namespace Garage3BL.Controllers
             }
             else
             {
-                ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo", vehicle.MemberId);
+                //var names = _db.ActivityMaps.Select(s => s.TeamName).Distinct().Select(n => new { TeamName = n }).ToList();
+                //ViewData["TeamNames"] = new SelectList(names, "TeamName", "TeamName", model.TeamName);
+                //var names = _context.Member.Distinct().Select(s => s.PersonalNo);//.Select(n => new { FirstName = n }).ToList();
+                //ViewData["MemberId"] = new SelectList(names, "Id", "MemberNo", vehicle.MemberId);
+                ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo", vehicle.MemberId).Distinct().ToList();
                 ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo", vehicle.RegNo);
                 Auxiliary.WarningReg = "Medlemmen eller regnumret finns inte...";
                 if (!flag1) Auxiliary.WarningReg = "Man måste vara minst 18 år för att kunna parkera...";
@@ -723,7 +728,7 @@ namespace Garage3BL.Controllers
 
             var vehicle = await _context.Vehicle.FindAsync(id);
             var member = await _context.Member.FindAsync(idmem);
-            //var vtype = _context.Set<Vtype>().Find(vid);
+            //var vtype = _context.Set<Vtype>().Find(idmem);
 
             if (vehicle != null && member != null)
             {
@@ -731,7 +736,7 @@ namespace Garage3BL.Controllers
                 {                    
                     _context.Vehicle.Remove(vehicle);
                     _context.Member.Remove(member);
-                    //_context.Set<Vtype>().Remove(vtype); <-- finns det en bättre metod?
+                    //_context.Set<Vtype>().Remove(vtype);
                     await _context.SaveChangesAsync();
                     Auxiliary.Operation = $"{vehicle.RegNo} är avregistrerad...";
                 }

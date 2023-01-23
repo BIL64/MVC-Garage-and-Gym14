@@ -11,9 +11,9 @@ string text = "First line" + Environment.NewLine;
 
 // The Tempdata provider cookie is not essential. Make it essential
 // so Tempdata is functional when tracking is disabled.
-builder.Services.Configure<CookieTempDataProviderOptions>(options => {
-    options.Cookie.IsEssential = true;
-});
+//builder.Services.Configure<CookieTempDataProviderOptions>(options => {
+//    options.Cookie.IsEssential = true;
+//});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

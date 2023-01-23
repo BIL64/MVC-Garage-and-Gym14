@@ -15,8 +15,8 @@ using System.Diagnostics;
 namespace Garage3BL.Controllers
 {
     public class MembersController : Controller
-    {
-        private readonly Garage3BLContext _context;
+    {       
+        private readonly Garage3BLContext _context;        
 
         public MembersController(Garage3BLContext context)
         {
@@ -24,27 +24,31 @@ namespace Garage3BL.Controllers
         }
 
         // GET: Members
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var model = _context.Member
-                .Distinct()
-                .Select(v => new Member
-                {
-                    Id = v.Id,
-                    MemberNo = v.MemberNo,
-                    FirstName = v.FirstName,
-                    LastName = v.LastName,
-                    PersonalNo = v.PersonalNo,
-                }); //.Distinct(); //.OrderBy(v => v.FirstName);
+            List<Member> lista1 = new List<Member>(); // Två listor krävs för att åstadkomma en distinct funktion.
+            List<Member> lista2 = new List<Member>();
 
-            //OrderBy(v => v.FirstName);
-            //model = model.GroupBy(v => v.FirstName).OrderBy(v => v).Select(y => y.First());
-            //return View("Index", model);
+            lista1.Clear();
+            lista2.Clear();
+            foreach (var item in _context.Member) // Laddar lista1 med alla medlemmar.
+            {
+                lista1.Add(item);
+            }
+
+            foreach (var item1 in lista1) // Kollar om de två listorna redan har samma medlem, i så fall sker ingen tilldelning.
+            {
+                int rak = 0;
+                foreach (var item2 in lista2) // Lista2 fylls succesivt på ifall jämförelsen går bra.
+                {
+                    if (item2.PersonalNo == item1.PersonalNo) rak++; // Personnr jämförs.
+                }
+                if (rak < 1) lista2.Add(item1);
+            }
 
             return _context.Member != null ?
-                        View(await model.ToListAsync()) :
-                        Problem("Entity set 'Garage3BLContext.Member'  is null.");
-            //return View("Index", model);
+                    View(lista2) :
+                    Problem("Entity set 'Garage3BLContext.Member'  is null.");
         }
 
         // Av Anna Vesslén
