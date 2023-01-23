@@ -6,7 +6,7 @@ namespace Garage3.Core
     {
         public int Id { get; set; }
 
-        [Display(Name = "Medlems-ID"), StringLength(20), Required(ErrorMessage = "Detta fält är obligatoriskt")]
+        [Display(Name = "ID"), StringLength(20), Required(ErrorMessage = "Detta fält är obligatoriskt")]
         public string MemberNo { get; set; } = string.Empty;
 
         [Display(Name = "Förnamn"), StringLength(30), Required(ErrorMessage = "Detta fält är obligatoriskt")]

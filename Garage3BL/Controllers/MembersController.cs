@@ -41,9 +41,10 @@ namespace Garage3BL.Controllers
             //model = model.GroupBy(v => v.FirstName).OrderBy(v => v).Select(y => y.First());
             //return View("Index", model);
 
-            return _context.Member != null ? 
+            return _context.Member != null ?
                         View(await model.ToListAsync()) :
                         Problem("Entity set 'Garage3BLContext.Member'  is null.");
+            //return View("Index", model);
         }
 
         // Av Anna Vesslén
@@ -55,8 +56,8 @@ namespace Garage3BL.Controllers
                     Id = v.Id,
                     MemberNo = v.MemberNo,
                     FirstName = v.FirstName,
-                    LastName= v.LastName,
-                    PersonalNo= v.PersonalNo,                    
+                    LastName = v.LastName,
+                    PersonalNo = v.PersonalNo,                    
                 });
 
             if (!string.IsNullOrWhiteSpace(searchString)) // Görs bara om det finns en söksträng.
@@ -157,9 +158,9 @@ namespace Garage3BL.Controllers
                 return NotFound();
             }
 
-            foreach (var item in _context.Member)
+            foreach (var item in _context.Member) // Medlemmar som äger fordon förekommer flera gånger - med olika id'n men med samma personnummer.
             {
-                if (member.PersonalNo == item.PersonalNo)
+                if (member.PersonalNo == item.PersonalNo) // De som har angivet PN uppdateras.
                 {
                     item.MemberNo = member.MemberNo;
                     item.FirstName = member.FirstName;
@@ -172,7 +173,7 @@ namespace Garage3BL.Controllers
                 try
                 {                    
                     await _context.SaveChangesAsync();
-                    Auxiliary.Operation = $"Redigeringen är genomförd...";
+                    Auxiliary.Operation = "Redigeringen är genomförd...";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -184,9 +185,10 @@ namespace Garage3BL.Controllers
                     {
                         throw;
                     }
-                }
+                }                
                 return RedirectToAction(nameof(Index));
             }
+            Auxiliary.WarningName = "ModelState is not valid...";
             return View(member);
         }
 
@@ -215,36 +217,20 @@ namespace Garage3BL.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             int tal = 0;
+            var mem = _context.Member // Först hämtas det personnummer som stämmer med id't.
+                .Where(v => v.Id == id);
 
-            var mem1 = _context.Member
-                .Where(v => v.Id == id)
-                .Select(v => new Member
-                {
-                    Id = v.Id,
-                    PersonalNo = v.PersonalNo
-                });
-
-            var mem2 = _context.Member
-                .Select(v => new Member
-                {
-                    Id = v.Id,
-                    PersonalNo = v.PersonalNo
-                });
-
-            foreach (var item1 in mem1)
+            foreach (var item1 in mem) // Det enda sättet att frigöra korrekt PN är att iterera den.
             {
-                foreach (var item2 in mem2)
+                foreach (var item2 in _context.Member) // Alla medlemmar kollas.
                 {
-                    if (item1.PersonalNo == item2.PersonalNo)
-                    {
-                        tal++;
-                    }
+                    if (item1.PersonalNo == item2.PersonalNo) tal++; // Finns det fler av samma PN blir tal > 1.
                 }
             }
 
             var member = await _context.Member.FindAsync(id);
 
-            if (tal < 2)
+            if (tal == 1)
             { 
                 if (_context.Member == null)
                 {
@@ -259,6 +245,7 @@ namespace Garage3BL.Controllers
                 return RedirectToAction(nameof(Index));            
             }
             Auxiliary.WarningName = "Alla fordon som tillhör en medlem måste först avregistreras innan medlemmen kan avregistreras...";
+            if (tal < 1) Auxiliary.WarningName = "Denna medlem finns inte...";
             return View(member);
         }
 

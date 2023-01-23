@@ -10,6 +10,18 @@
 <div>
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Members)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Members.FullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Vtype)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vtype.Type)
+        </dd>        
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.RegNo)
         </dt>
         <dd class = "col-sm-10">
@@ -38,49 +50,7 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Wheels)
-        </dd>
-        @*<dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Place)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Place)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ArrivalTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ArrivalTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ParkedTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ParkedTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsParked)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsParked)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InCome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InCome)
-        </dd>*@
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vtype)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vtype.Type)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Members)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Members.FullName)
-        </dd>
+        </dd>        
     </dl>
 </div>
 <div>

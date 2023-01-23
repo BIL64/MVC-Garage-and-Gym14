@@ -50,10 +50,10 @@ namespace Garage3.Core
         public Member Members { get; set; } = new Member(); // Ägaren till fordonet.
 
         // Foreign keys
-        [Display(Name = "Fordonstyp int")]
+        [Display(Name = "Fordonstyp")]
         public int VtypeId { get; set; } // Typ av fordon int.
 
-        [Display(Name = "Din identifikation")]
+        [Display(Name = "ID")]
         public int MemberId { get; set; } // Samma id som ägaren.
     }
 }

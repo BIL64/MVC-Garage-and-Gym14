@@ -1,4 +1,6 @@
-﻿@model Garage3.Core.Vehicle
+﻿@using Garage3.Core
+
+@model Garage3.Core.Vehicle
 
 @{
     ViewData["Title"] = "Edit";
@@ -14,7 +16,12 @@
             <div class="form-group">
                 <label asp-for="RegNo" class="control-label"></label>
                 <input asp-for="RegNo" class="form-control" />
-                <span asp-validation-for="RegNo" class="text-danger"></span>
+                <span asp-validation-for="VtypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VtypeId" class="control-label"></label>
+                <select asp-for="VtypeId" class="form-control" asp-items="ViewBag.VtypeId"></select>
+                <span asp-validation-for="VtypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Brand" class="control-label"></label>
@@ -36,46 +43,16 @@
                 <input asp-for="Wheels" class="form-control" />
                 <span asp-validation-for="Wheels" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Place" class="control-label"></label>
-                <input asp-for="Place" class="form-control" />
-                <span asp-validation-for="Place" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ArrivalTime" class="control-label"></label>
-                <input asp-for="ArrivalTime" class="form-control" />
-                <span asp-validation-for="ArrivalTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ParkedTime" class="control-label"></label>
-                <input asp-for="ParkedTime" class="form-control" />
-                <span asp-validation-for="ParkedTime" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsParked" /> @Html.DisplayNameFor(model => model.IsParked)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="InCome" class="control-label"></label>
-                <input asp-for="InCome" class="form-control" />
-                <span asp-validation-for="InCome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MemberId" class="control-label"></label>
-                <select asp-for="MemberId" class="form-control" asp-items="ViewBag.MemberId"></select>
-                <span asp-validation-for="MemberId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="VtypeId" class="control-label"></label>
-                <select asp-for="VtypeId" class="form-control" asp-items="ViewBag.VtypeId"></select>
-                <span asp-validation-for="VtypeId" class="text-danger"></span>
-            </div>*@
             <br />
             <div class="form-group">
                 <input type="submit" value="Spara" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div class="md-4">
+        <br />
+        <h5 style="color: green ">@Auxiliary.Operation</h5> @*Meddelande*@
+        <h5 style="color: orangered">@Auxiliary.WarningReg</h5> @*Meddelande*@
     </div>
 </div>
 

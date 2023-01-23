@@ -1,4 +1,6 @@
-﻿@model Garage3.Core.Member
+﻿@using Garage3.Core
+
+@model Garage3.Core.Member
 
 @{
     ViewData["Title"] = "Edit";
@@ -27,13 +29,19 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="hidden" asp-for="PersonalNo" class="form-control" />
+                <label asp-for="PersonalNo" class="control-label"></label>
+                <input asp-for="PersonalNo" class="form-control" readonly />
+                <span asp-validation-for="PersonalNo" class="text-danger"></span>
             </div>
             <br />
             <div class="form-group">
                 <input type="submit" value="Spara" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div class="md-4">
+        <br />
+        <h5 style="color: orangered">@Auxiliary.WarningName</h5> @*Meddelande*@
     </div>
 </div>
 
