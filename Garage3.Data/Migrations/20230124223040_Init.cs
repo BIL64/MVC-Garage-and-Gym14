@@ -56,6 +56,9 @@ namespace Garage3.Data.Migrations
                     ParkedTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsParked = table.Column<bool>(type: "bit", nullable: false),
                     InCome = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MemberNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VtypeId = table.Column<int>(type: "int", nullable: false),
                     MemberId = table.Column<int>(type: "int", nullable: false)
                 },

@@ -17,5 +17,7 @@ namespace Garage3BL.Data
         public DbSet<Garage3.Core.Member> Member { get; set; } = default!;
 
         public DbSet<Garage3.Core.Vehicle> Vehicle { get; set; } = default!;
+
+        public DbSet<Garage3.Core.Vtype> Vtype { get; set; } = default!;
     }
 }

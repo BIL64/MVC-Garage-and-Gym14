@@ -4,68 +4,8 @@
 
 @{
     ViewData["Title"] = "Plus";
+
 }
-
-<h3>Statistik</h3>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Statistic.nBilar
-            </th>
-            <th>
-                @Statistic.nMcyklar
-            </th>
-            <th>
-                @Statistic.nLbilar
-            </th>
-            <th>
-                @Statistic.nBussar
-            </th>
-            <th>
-                @Statistic.nTraktorer
-            </th>
-            <th>
-                @Statistic.nEmaskiner
-            </th>
-            <th>
-                @Statistic.nHjul
-            </th>
-            <th>
-                @Statistic.nInCome
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                &nbsp;@Statistic.Bilar
-            </td>
-            <td>
-                &nbsp;@Statistic.Mcyklar
-            </td>
-            <td>
-                &nbsp;@Statistic.Lbilar
-            </td>
-            <td>
-                &nbsp;@Statistic.Bussar
-            </td>
-            <td>
-                &nbsp;@Statistic.Traktorer
-            </td>
-            <td>
-                &nbsp;@Statistic.Emaskiner
-            </td>
-            <td>
-                &nbsp;@Statistic.Hjul
-            </td>
-            <td>
-                &nbsp;@Statistic.InCome kr
-            </td>
-        </tr>
-    </tbody>
-</table>
 
 <h3>Inställningar</h3>
 
@@ -82,7 +22,7 @@
             </div>
             <br />
             <div id="in_form" class="form-group hide">
-                <input type="submit" name="subcap" value="UTFÖR RADERING" class="btn btn-danger">
+                <input type="submit" name="subcap" value="UTFÖR UTCHECKNING" class="btn btn-danger">
             </div>
             <br />
         </form>
@@ -136,7 +76,7 @@
         comBut.onmouseup = openSubmit;
 
         function openSubmit() {
-            if (confirm("Detta kommer att radera alla fordon i databasen...")) newcap = true;
+            if (confirm("Alla fordon som är parkerade kommer att avparkeras...")) newcap = true;
             if (newcap) document.getElementById("in_form").className = "form-group show"; /*Byter klass*/
         }
     </script>

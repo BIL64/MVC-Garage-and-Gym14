@@ -16,7 +16,7 @@ namespace Garage3.Core
         public string RegNo { get; set; } = string.Empty;
 
         [Display(Name = "Fordonstyp")]
-        public Vtype Vtype { get; set; } = new Vtype();
+        public string Type { get; set; } = string.Empty;
 
         [Display(Name = "Ankomsttid")]
         public DateTime TimeEnter { get; set; }

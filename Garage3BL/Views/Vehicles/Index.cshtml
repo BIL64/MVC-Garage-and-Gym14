@@ -16,13 +16,13 @@
     <thead>
         <tr>            
             <th>
-                Namn
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Members.MemberNo)
+                @Html.DisplayNameFor(model => model.MemberNo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vtype)
+                @Html.DisplayNameFor(model => model.Type)
                 <a href="@Url.Action("SearchSort", new {sortOrder=ViewBag.TypeSort})">
                     <img src="@Url.Content("../images/UpDownArrow.png")" id="arrows" alt="arrows" />
                 </a>
@@ -50,13 +50,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Members.FullName)
+                        @Html.DisplayFor(modelItem => item.FullName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Members.MemberNo)
+                        @Html.DisplayFor(modelItem => item.MemberNo)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Vtype.Type)
+                        @Html.DisplayFor(modelItem => item.Type)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.RegNo)

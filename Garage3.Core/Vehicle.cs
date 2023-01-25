@@ -42,12 +42,21 @@ namespace Garage3.Core
         [Display(Name = "Intäkter")]
         public int InCome { get; set; }
 
-        // Navigation properties
         [Display(Name = "Fordonstyp")]
-        public Vtype Vtype { get; set; } = new Vtype(); // 1. Bil, 2. Motorcykel, 3. Lastbil...- 6.
+        public string Type { get; set; } = string.Empty;
 
         [Display(Name = "Ägare")]
-        public Member Members { get; set; } = new Member(); // Ägaren till fordonet.
+        public string FullName { get; set; } = string.Empty;
+
+        [Display(Name = "ID")]
+        public string MemberNo { get; set; } = string.Empty;
+
+        // Navigation properties
+        //[Display(Name = "Fordonstyp")]
+        //public Vtype Vtype { get; set; } = new Vtype(); // 1. Bil, 2. Motorcykel, 3. Lastbil...- 6.
+
+        //[Display(Name = "Ägare")]
+        //public Member Members { get; set; } = new Member(); // Ägaren till fordonet.
 
         // Foreign keys
         [Display(Name = "Fordonstyp")]

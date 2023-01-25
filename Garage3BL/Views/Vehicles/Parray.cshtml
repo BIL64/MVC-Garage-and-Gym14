@@ -16,9 +16,68 @@
         </li>   
 }
 </ul>
+<br />
+<br />
+<h4><i>Statistik</i></h4>
 
-<br />
-<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Statistic.nBilar
+            </th>
+            <th>
+                @Statistic.nMcyklar
+            </th>
+            <th>
+                @Statistic.nLbilar
+            </th>
+            <th>
+                @Statistic.nBussar
+            </th>
+            <th>
+                @Statistic.nTraktorer
+            </th>
+            <th>
+                @Statistic.nEmaskiner
+            </th>
+            <th>
+                @Statistic.nHjul
+            </th>
+            <th>
+                @Statistic.nInCome
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                &nbsp;@Statistic.Bilar
+            </td>
+            <td>
+                &nbsp;@Statistic.Mcyklar
+            </td>
+            <td>
+                &nbsp;@Statistic.Lbilar
+            </td>
+            <td>
+                &nbsp;@Statistic.Bussar
+            </td>
+            <td>
+                &nbsp;@Statistic.Traktorer
+            </td>
+            <td>
+                &nbsp;@Statistic.Emaskiner
+            </td>
+            <td>
+                &nbsp;@Statistic.Hjul
+            </td>
+            <td>
+                &nbsp;@Statistic.InCome kr
+            </td>
+        </tr>
+    </tbody>
+</table>
 <br />
 <h4><i>Det totala antalet registrerade fordon</i></h4>
 
@@ -26,16 +85,16 @@
     <thead>
         <tr>
             <th>
-                Namn
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Members)
-            </th>            
+                @Html.DisplayNameFor(model => model.MemberNo)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.RegNo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Vtype)
+                @Html.DisplayNameFor(model => model.Type)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Brand)
@@ -56,16 +115,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Members.FullName)
+                    @Html.DisplayFor(modelItem => item.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Members.MemberNo)
+                    @Html.DisplayFor(modelItem => item.MemberNo)
                 </td>                
                 <td>
                     @Html.DisplayFor(modelItem => item.RegNo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Vtype.Type)
+                    @Html.DisplayFor(modelItem => item.Type)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Brand)

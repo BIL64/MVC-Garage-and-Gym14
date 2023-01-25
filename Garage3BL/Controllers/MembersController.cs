@@ -24,30 +24,11 @@ namespace Garage3BL.Controllers
         }
 
         // GET: Members
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Member> lista1 = new List<Member>(); // Två listor krävs för att åstadkomma en distinct funktion.
-            List<Member> lista2 = new List<Member>();
-
-            lista1.Clear();
-            lista2.Clear();
-            foreach (var item in _context.Member) // Laddar lista1 med alla medlemmar.
-            {
-                lista1.Add(item);
-            }
-
-            foreach (var item1 in lista1) // Kollar om de två listorna redan har samma medlem, i så fall sker ingen tilldelning.
-            {
-                int rak = 0;
-                foreach (var item2 in lista2) // Lista2 fylls succesivt på ifall jämförelsen går bra.
-                {
-                    if (item2.PersonalNo == item1.PersonalNo) rak++; // Personnr jämförs.
-                }
-                if (rak < 1) lista2.Add(item1);
-            }
-
+            var garage3BLContext = _context.Member;
             return _context.Member != null ?
-                    View(lista2) :
+                    View(await garage3BLContext.ToListAsync()) :
                     Problem("Entity set 'Garage3BLContext.Member'  is null.");
         }
 
@@ -162,13 +143,22 @@ namespace Garage3BL.Controllers
                 return NotFound();
             }
 
-            foreach (var item in _context.Member) // Medlemmar som äger fordon förekommer flera gånger - med olika id'n men med samma personnummer.
+            foreach (var item in _context.Member) // Ersätter berörda poster för gällande medlem med redigerade poster.
             {
-                if (member.PersonalNo == item.PersonalNo) // De som har angivet PN uppdateras.
+                if (item.Id == id)
                 {
                     item.MemberNo = member.MemberNo;
                     item.FirstName = member.FirstName;
                     item.LastName = member.LastName;
+                }
+            }
+
+            foreach (var item in _context.Vehicle) // Ersätter berörda poster för gällande medlem med redigerade poster.
+            {
+                if (item.MemberId == id)
+                {
+                    item.MemberNo = member.MemberNo;
+                    item.FullName = member.FullName;
                 }
             }
 
@@ -221,20 +211,20 @@ namespace Garage3BL.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             int tal = 0;
-            var mem = _context.Member // Först hämtas det personnummer som stämmer med id't.
-                .Where(v => v.Id == id);
+            //var veh = _context.Vehicle // Först hämtas de fordon som tillhör em medlem.
+            //    .Where(v => v.MemberId == id);
 
-            foreach (var item1 in mem) // Det enda sättet att frigöra korrekt PN är att iterera den.
+            foreach (var item in _context.Vehicle) // Filtrering av ev fordon. //Det enda sättet att frigöra korrekt PN är att iterera den.
             {
-                foreach (var item2 in _context.Member) // Alla medlemmar kollas.
-                {
-                    if (item1.PersonalNo == item2.PersonalNo) tal++; // Finns det fler av samma PN blir tal > 1.
-                }
+                //foreach (var item2 in _context.Member) // Alla medlemmar kollas.
+                //{
+                    if (item.MemberId == id) tal++; // Har ägaren fordon som är registrerade?
+                //}
             }
 
             var member = await _context.Member.FindAsync(id);
 
-            if (tal == 1)
+            if (tal < 1)
             { 
                 if (_context.Member == null)
                 {

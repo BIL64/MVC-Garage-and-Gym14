@@ -10,16 +10,16 @@
 <div>
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Members)
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Members.FullName)
+            @Html.DisplayFor(model => model.FullName)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Vtype)
+            @Html.DisplayNameFor(model => model.Type)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vtype.Type)
+            @Html.DisplayFor(model => model.Type)
         </dd>        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.RegNo)
@@ -54,5 +54,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Ändra</a>
+    <button type="button" class="aabutt"><a class="alink" asp-action="Edit" asp-route-id="@Model?.Id">Ändra</a></button>&nbsp;
+    <button type="button" class="aabutt"><a class="alink" asp-action="Parray">Gå tillbaka</a></button>
 </div>

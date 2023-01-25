@@ -55,8 +55,6 @@ namespace Garage3BL.Controllers
         // GET: Vehicles (ändring: Björn Lindqvist)
         public async Task<IActionResult> Index()
         {
-            string typ = string.Empty;
-
             if (Auxiliary.Start) // Görs bara första gången översikten körs.
             {
                 Auxiliary.Capacity = new string[Readfile2int("Config_cap.txt", 20)]; // Läser in variabler från filer.
@@ -72,14 +70,7 @@ namespace Garage3BL.Controllers
 
                     if (item.IsParked) // Parkerar in fordon från databasen.
                     {
-                        var model = _context.Set<Vtype>() // Hämtar fordonstypen.
-                            .Where(x => x.Id == item.VtypeId);
-                        foreach (var id in model)
-                        {
-                            typ = id.Type;
-                        }
-
-                        switch (typ) // Laddar arrayen och skapar nödvändig plats.
+                        switch (item.Type) // Laddar arrayen och skapar nödvändig plats.
                         {
                             case "Lastbil":
                                 Auxiliary.Counter++;
@@ -146,8 +137,8 @@ namespace Garage3BL.Controllers
                 {
                     items.ParkedTime = Ptime(items.ArrivalTime); // För alla fordon ges P-tid.
                 }
-            }                        
-            var garage3BLContext = _context.Vehicle.Include(v => v.Members).Include(v => v.Vtype);
+            }
+            var garage3BLContext = _context.Vehicle;
             return View(await garage3BLContext.ToListAsync());
         }        
 
@@ -170,15 +161,16 @@ namespace Garage3BL.Controllers
                     ParkedTime = v.ParkedTime,
                     IsParked = v.IsParked,
                     InCome = v.InCome,
-                    Vtype = v.Vtype,
-                    Members = v.Members,
+                    Type = v.Type,
+                    FullName = v.FullName,
+                    MemberNo = v.MemberNo,
                     MemberId = v.MemberId,
-                    VtypeId = v.VtypeId,                    
+                    VtypeId = v.VtypeId
                 });
 
             if (!string.IsNullOrWhiteSpace(searchString)) // Görs bara om det finns en söksträng.
             {
-                model = model.Where(v => v.VtypeId.Equals(searchString) || v.RegNo.Equals(searchString));
+                model = model.Where(v => v.Type.Equals(searchString) || v.RegNo.Equals(searchString));
             }
 
             if (model.ToList().Count == 0 && Auxiliary.Counter > 0) ModelState
@@ -187,10 +179,10 @@ namespace Garage3BL.Controllers
             switch (sortOrder) // Olika ordningsföljder.
             {                
                 case "Type":
-                    model = model.OrderBy(v => v.Vtype);
+                    model = model.OrderBy(v => v.Type);
                     break;
                 case "type_desc":
-                    model = model.OrderByDescending(v => v.Vtype);
+                    model = model.OrderByDescending(v => v.Type);
                     break;
                 case "regno_desc":
                     model = model.OrderByDescending(v => v.RegNo);
@@ -207,24 +199,16 @@ namespace Garage3BL.Controllers
         {
             Auxiliary.Reset(); // Raderar alla meddelanden.
 
-            var garage3BLContext = _context.Vehicle.Include(v => v.Members).Include(v => v.Vtype);
-            return View(await garage3BLContext.ToListAsync());
-        }
-
-        // Av Björn Lindqvist
-        public IActionResult Statistics() // Count räknar hur många det finns i databasen av respektive typ.
-        {
-            Auxiliary.Reset(); // Raderar alla meddelanden.
-
-            Statistic.Bilar = _context.Vehicle.Count(c => c.Vtype.Type == "Bil");
-            Statistic.Mcyklar = _context.Vehicle.Count(c => c.Vtype.Type == "Motorcykel");
-            Statistic.Lbilar = _context.Vehicle.Count(c => c.Vtype.Type == "Lastbil");
-            Statistic.Bussar = _context.Vehicle.Count(c => c.Vtype.Type == "Buss");
-            Statistic.Traktorer = _context.Vehicle.Count(c => c.Vtype.Type == "Traktor");
-            Statistic.Emaskiner = _context.Vehicle.Count(c => c.Vtype.Type == "Entreprenadmaskin");
+            Statistic.Bilar = _context.Vehicle.Count(c => c.Type == "Bil");
+            Statistic.Mcyklar = _context.Vehicle.Count(c => c.Type == "Motorcykel");
+            Statistic.Lbilar = _context.Vehicle.Count(c => c.Type == "Lastbil");
+            Statistic.Bussar = _context.Vehicle.Count(c => c.Type == "Buss");
+            Statistic.Traktorer = _context.Vehicle.Count(c => c.Type == "Traktor");
+            Statistic.Emaskiner = _context.Vehicle.Count(c => c.Type == "Entreprenadmaskin");
             Statistic.Hjul = _context.Vehicle.Sum(c => c.Wheels);
 
-            return View();
+            var garage3BLContext = _context.Vehicle;
+            return View(await garage3BLContext.ToListAsync());
         }
 
         // Av Björn Lindqvist
@@ -240,11 +224,14 @@ namespace Garage3BL.Controllers
 
             var vehicle = _context.Vehicle;
 
-            if (subcap == "UTFÖR RADERING" && capacity >= 5)
+            if (subcap == "UTFÖR UTCHECKNING" && capacity >= 5)
             {
-                foreach (var item in vehicle) // Tar bort alla fordon i databasen.
+                foreach (var item in vehicle) // Markerar alla fordon i databasen som ej parkerade.
                 {
-                    _context.Vehicle.Remove(item);
+                    if (item.IsParked)
+                    {
+                        item.IsParked = false;
+                    }
                 }
                 await _context.SaveChangesAsync();
                 Auxiliary.Counter = 0;
@@ -311,33 +298,30 @@ namespace Garage3BL.Controllers
         public IActionResult Create()
         {
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName");
-            ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type");
+            ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type");
             return View();
         }
 
         // POST: Vehicles/Create  (ändring: Björn Lindqvist)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Vehicle vehicle)
+        public async Task<IActionResult> Create(Member member, Vehicle vehicle, Vtype vtype)
         {
             var mem = _context.Member // Hämtar den medlem som äger fordonet från Member.
                 .Where(v => v.Id == vehicle.MemberId);
 
             foreach (var item in mem) // Ägarens uppgifter tilldelas Members i Vehicle.
             {
-                vehicle.Members.MemberNo = item.MemberNo;
-                vehicle.Members.FirstName = item.FirstName;
-                vehicle.Members.LastName = item.LastName;
-                vehicle.Members.PersonalNo = item.PersonalNo;
+                vehicle.FullName = item.FullName;
+                vehicle.MemberNo = item.MemberNo;
             }
 
-            var veh = _context.Set<Vtype>() // Hämtar ut Vtype i Vehicle och som har rätt fordons-id.
+            var veh = _context.Vtype // Hämtar ut Vtype i Vehicle och som har rätt fordons-id.
                 .Where(v => v.Id == vehicle.VtypeId);
 
             foreach (var item in veh) // Vtype.Type tilldelas fordonstypen.
             {
-                vehicle.Vtype.Type = item.Type;
-                vehicle.Vtype.Vehicles = item.Vehicles;
+                vehicle.Type = item.Type;
             }
 
             // Andra nödvändiga tilldelningar.
@@ -346,7 +330,8 @@ namespace Garage3BL.Controllers
             vehicle.ParkedTime = Ptime(vehicle.ArrivalTime);
             vehicle.IsParked = false;                       
 
-            vehicle.Members.Vehicles.Add(vehicle); // Vehicles i Members tilldelas det som nu finns i Vehicle (allt).
+            member.Vehicles.Add(vehicle); // Vehicles i Member tilldelas det som nu finns i Vehicle (allt).
+            vtype.Vehicles.Add(vehicle); // Likaså för Vtype.
 
             vehicle.RegNo = vehicle.RegNo.ToUpper(); // Tvingar till versaler.
             bool flag = _context.Vehicle.Any(p => p.RegNo.ToUpper() == vehicle.RegNo); // Jämför regnummer i databasen med inkommande.
@@ -356,14 +341,14 @@ namespace Garage3BL.Controllers
                 _context.Add(vehicle);
                 await _context.SaveChangesAsync();
                 ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", vehicle.MemberId);
-                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
+                ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type", vehicle.VtypeId);
                 Auxiliary.Operation = $"Ditt fordon nr {Auxiliary.Rak++} är nu inregistrerat...";
                 return View(vehicle);
             }
             else
             {
                 ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", vehicle.MemberId);
-                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
+                ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type", vehicle.VtypeId);
                 Auxiliary.WarningReg = "Regnumret är upptaget...";
                 return View(vehicle);
             }
@@ -372,19 +357,11 @@ namespace Garage3BL.Controllers
         // Av Björn Lindqvist
         public async Task<IActionResult> Parking_in(Vehicle park) // Sköter inparkering.
         {
-            string typ = string.Empty;
             bool flag = false;
             int rak = 0;
             int tal = 0;
 
-            var model = _context.Set<Vtype>() // Hämtar fordonstypen.
-                            .Where(x => x.Id == park.VtypeId);
-            foreach (var id in model)
-            {
-                typ = id.Type;
-            }
-
-            switch (typ)
+            switch (park.Type)
             {
                 case "Lastbil":
                     do
@@ -426,7 +403,7 @@ namespace Garage3BL.Controllers
 
             if (flag)
             {
-                switch (typ) // Genomför inläggning oavsett lucka.
+                switch (park.Type) // Genomför inläggning oavsett lucka.
                 {
                     case "Lastbil":
                         Auxiliary.Counter += 5;
@@ -472,7 +449,7 @@ namespace Garage3BL.Controllers
                         break;
                 }
                 await _context.SaveChangesAsync();
-                Auxiliary.Thanks4P = $"Tack {park.Members.FullName} för att du parkerar hos BL GARAGE !";
+                Auxiliary.Thanks4P = $"Tack {park.FullName} för att du parkerar hos BL GARAGE !";
             }
             else
             {
@@ -485,9 +462,7 @@ namespace Garage3BL.Controllers
         //GET: Vehicles/Parking
         public IActionResult Parking()
         {
-            //var names = _context.Member.Distinct().Select(s => s.PersonalNo);//.Select(n => new { FirstName = n }).ToList();
-            //ViewData["MemberId"] = new SelectList(names, "Id", "MemberNo");
-            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo").Distinct().ToList();
+            ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo");
             ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo");
             return View();
         }
@@ -544,15 +519,11 @@ namespace Garage3BL.Controllers
             }
             else
             {
-                //var names = _db.ActivityMaps.Select(s => s.TeamName).Distinct().Select(n => new { TeamName = n }).ToList();
-                //ViewData["TeamNames"] = new SelectList(names, "TeamName", "TeamName", model.TeamName);
-                //var names = _context.Member.Distinct().Select(s => s.PersonalNo);//.Select(n => new { FirstName = n }).ToList();
-                //ViewData["MemberId"] = new SelectList(names, "Id", "MemberNo", vehicle.MemberId);
-                ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo", vehicle.MemberId).Distinct().ToList();
+                ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo", vehicle.MemberId);
                 ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo", vehicle.RegNo);
                 Auxiliary.WarningReg = "Medlemmen eller regnumret finns inte...";
                 if (!flag1) Auxiliary.WarningReg = "Man måste vara minst 18 år för att kunna parkera...";
-                if (!flag4) Auxiliary.WarningReg = "Fordonet är redan parkerad...";
+                if (!flag4 && flag2 && flag3) Auxiliary.WarningReg = "Fordonet är redan parkerad...";
                 return View(vehicle);
             }
         }
@@ -567,8 +538,6 @@ namespace Garage3BL.Controllers
 
             Auxiliary.Reset(); // Raderar alla meddelanden.
             var vehicle = await _context.Vehicle
-                .Include(v => v.Members)
-                .Include(v => v.Vtype)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
@@ -592,7 +561,7 @@ namespace Garage3BL.Controllers
             {
                 return NotFound();
             }
-            ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type");
+            ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type");
             return View(vehicle);
         }
 
@@ -601,51 +570,61 @@ namespace Garage3BL.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Vehicle vehicle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RegNo,VtypeId,Brand,Vmodel,Color,Wheel,IsParked")] Vehicle vehicle)
         {
             if (id != vehicle.Id)
             {
                 return NotFound();
             }
 
-            var veh = _context.Vehicle // Fordonet med motsvarande id hämtas och dess data läggs i veh.
-                .Where(v => v.Id == id)
-                .Select(v => new Vehicle
-                 {
-                    Id = v.Id,
-                    Place = v.Place,
-                    ArrivalTime = v.ArrivalTime,
-                    ParkedTime = v.ParkedTime,
-                    IsParked = v.IsParked,
-                    InCome = v.InCome,                   
-                    Members = v.Members,
-                    MemberId = v.MemberId,
-                });
-
-            foreach (var item in veh) // All data som hör till det redigerade fordonet tilldelas vehicle.
-            {
-                vehicle.Id = item.Id;
-                vehicle.Place = item.Place;
-                vehicle.ArrivalTime = item.ArrivalTime;
-                vehicle.ParkedTime = item.ParkedTime;
-                vehicle.IsParked = item.IsParked;
-                vehicle.InCome = item.InCome;
-                vehicle.Members = item.Members;
-                vehicle.MemberId = item.MemberId;
-            }
-
-            vehicle.RegNo = vehicle.RegNo.ToUpper();
-
-            var vty = _context.Set<Vtype>() // Hämtar ut Vtype i Vehicle och som har rätt fordons-id.
+            var vty = _context.Vtype // Hämtar ut fordonstyp i Vtype och som har rätt fordons-id.
                 .Where(v => v.Id == vehicle.VtypeId);
 
-            foreach (var item in vty) // Vtype.Type tilldelas fordonstypen.
+            foreach (var item in vty) // Type i Vehicle tilldelas fordonstypen.
             {
-                vehicle.Vtype.Type = item.Type;
-                vehicle.Vtype.Vehicles = item.Vehicles;
+                vehicle.Type = item.Type;
             }
 
-            vehicle.Members.Vehicles.Add(vehicle); // Vehicles i Members tilldelas allt som nu finns i Vehicle.
+            foreach (var item in _context.Vehicle) // Ersätter berörda poster för gällande fordon med redigerade poster.
+            {
+                if (item.Id == id)
+                {
+                    item.RegNo = vehicle.RegNo.ToUpper();
+                    item.Type = vehicle.Type;
+                    item.Brand = vehicle.Brand;
+                    item.Vmodel = vehicle.Vmodel;
+                    item.Color = vehicle.Color;
+                    item.Wheels = vehicle.Wheels;
+                }
+            }
+
+            var vehlist = _context.Member // Skriver över berörd post i fordonslistan tillhörande Member.
+                .Where(c => c.Id == vehicle.MemberId)
+                    .Select(c => new Member
+                    {
+                        Id = c.Id,
+                        Vehicles = c.Vehicles
+                    });
+
+            foreach (var item in vehlist)
+            {
+                item.Vehicles.Add(vehicle);
+            }
+
+            var vtylist = _context.Vtype // Skriver över berörd post i fordonslistan tillhörande Vtype.
+                .Where(c => c.Id == vehicle.VtypeId)
+                    .Select(c => new Vtype
+                    {
+                        Id = c.Id,
+                        Type = c.Type,
+                        Vehicles = c.Vehicles
+                    });
+
+            foreach (var item in vtylist)
+            {
+                vehicle.Type = item.Type;
+                item.Vehicles.Add(vehicle);
+            }
 
             if (!vehicle.IsParked)
             {
@@ -665,12 +644,12 @@ namespace Garage3BL.Controllers
                         throw;
                     }
                 }
-                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
+                ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type", vehicle.VtypeId);
                 return View(vehicle);
             }
             else
             {
-                ViewData["VtypeId"] = new SelectList(_context.Set<Vtype>(), "Id", "Type", vehicle.VtypeId);
+                ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type", vehicle.VtypeId);
                 Auxiliary.WarningReg = "Fordonet måste checka ut först innan någon ändring kan göras...";
                 return View(vehicle);
             }
@@ -687,8 +666,6 @@ namespace Garage3BL.Controllers
 
             Auxiliary.Reset(); // Raderar alla meddelanden.
             var vehicle = await _context.Vehicle
-                .Include(v => v.Members)
-                .Include(v => v.Vtype)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
@@ -703,40 +680,18 @@ namespace Garage3BL.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            int idmem = 0;
-            //int vid = 0;
-
             if (_context.Vehicle == null)
             {
                 return Problem("Entity set 'Garage3BLContext.Vehicle'  is null.");
             }
 
-            var mem = _context.Vehicle
-                .Where(v => v.Id == id)
-                .Select(v => new Vehicle
-                {
-                    Id = v.Id,
-                    MemberId = v.MemberId,
-                    VtypeId = v.VtypeId
-                });
-
-            foreach (var item in mem)
-            {
-                idmem = item.MemberId;
-                //vid = item.VtypeId; <-- finns det en bättre metod?
-            }
-
             var vehicle = await _context.Vehicle.FindAsync(id);
-            var member = await _context.Member.FindAsync(idmem);
-            //var vtype = _context.Set<Vtype>().Find(idmem);
 
-            if (vehicle != null && member != null)
+            if (vehicle != null)
             {
                 if (!vehicle.IsParked)
                 {                    
                     _context.Vehicle.Remove(vehicle);
-                    _context.Member.Remove(member);
-                    //_context.Set<Vtype>().Remove(vtype);
                     await _context.SaveChangesAsync();
                     Auxiliary.Operation = $"{vehicle.RegNo} är avregistrerad...";
                 }
@@ -776,8 +731,6 @@ namespace Garage3BL.Controllers
 
             Auxiliary.Reset(); // Raderar alla meddelanden.
             var vehicle = await _context.Vehicle
-                .Include(v => v.Members)
-                .Include(v => v.Vtype)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (vehicle == null)
             {
@@ -787,10 +740,9 @@ namespace Garage3BL.Controllers
             return View(vehicle);
         }
 
-        // POST: Vehicles/Delete/5 (ändring: Sorosh Farahmand och Björn Lindqvist)
-        [HttpPost, ActionName("Unparking")]
-        [ValidateAntiForgeryToken]
         // Av Björn Lindqvist)
+        [HttpPost, ActionName("Unparking")]
+        [ValidateAntiForgeryToken]        
         public async Task<IActionResult> Unparking(int id)
         {
             if (_context.Vehicle == null)
@@ -859,7 +811,7 @@ namespace Garage3BL.Controllers
             {
                 Id = id,
                 RegNo = vehicle.RegNo,
-                Vtype = vehicle.Vtype,
+                Type = vehicle.Type,
                 TimeEnter = vehicle.ArrivalTime,
                 TimeExit = timeExit,
                 Price = price,
