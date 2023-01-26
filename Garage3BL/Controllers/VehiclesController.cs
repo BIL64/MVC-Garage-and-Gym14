@@ -55,6 +55,8 @@ namespace Garage3BL.Controllers
         // GET: Vehicles (ändring: Björn Lindqvist)
         public async Task<IActionResult> Index()
         {
+            List<Vehicle> vlist = new List<Vehicle>();
+
             if (Auxiliary.Start) // Görs bara första gången översikten körs.
             {
                 Auxiliary.Capacity = new string[Readfile2int("Config_cap.txt", 20)]; // Läser in variabler från filer.
@@ -123,21 +125,30 @@ namespace Garage3BL.Controllers
                                 break;
                         }
                     }                    
-                    item.ParkedTime = Ptime(item.ArrivalTime); // För alla fordon ges P-tid.
-
-                }
-                await _context.SaveChangesAsync();
+                }                
                 Auxiliary.Start = false;
             }
-            else
-            {
-                var vehicle = _context.Vehicle;
 
-                foreach (var items in vehicle)
+            var vehicle = await _context.Vehicle.ToListAsync();
+            vlist.Clear();
+
+            foreach (var item in vehicle)
+            {
+                item.ParkedTime = Ptime(item.ArrivalTime); // För alla fordon ges P-tid.
+                vlist.Add(item); // Temporär lista för Vehicles.
+            }
+
+            var member = await _context.Member.ToListAsync();
+
+            foreach (var item in member) // Member.Vehicles tilldelas det som finns i den temporära listan.
+            {
+                foreach (var items in vlist)
                 {
-                    items.ParkedTime = Ptime(items.ArrivalTime); // För alla fordon ges P-tid.
+                    if (item.Id == items.MemberId) item.Vehicles.Add(items);
                 }
             }
+
+            await _context.SaveChangesAsync();
             var garage3BLContext = _context.Vehicle;
             return View(await garage3BLContext.ToListAsync());
         }        
@@ -152,6 +163,7 @@ namespace Garage3BL.Controllers
                 .Select(v => new Vehicle {
                     Id = v.Id,
                     RegNo = v.RegNo,
+                    Type = v.Type,
                     Brand = v.Brand,
                     Vmodel = v.Vmodel,
                     Color = v.Color,
@@ -160,8 +172,7 @@ namespace Garage3BL.Controllers
                     ArrivalTime = v.ArrivalTime,
                     ParkedTime = v.ParkedTime,
                     IsParked = v.IsParked,
-                    InCome = v.InCome,
-                    Type = v.Type,
+                    InCome = v.InCome,                    
                     FullName = v.FullName,
                     MemberNo = v.MemberNo,
                     MemberId = v.MemberId,
@@ -330,9 +341,6 @@ namespace Garage3BL.Controllers
             vehicle.ParkedTime = Ptime(vehicle.ArrivalTime);
             vehicle.IsParked = false;                       
 
-            member.Vehicles.Add(vehicle); // Vehicles i Member tilldelas det som nu finns i Vehicle (allt).
-            vtype.Vehicles.Add(vehicle); // Likaså för Vtype.
-
             vehicle.RegNo = vehicle.RegNo.ToUpper(); // Tvingar till versaler.
             bool flag = _context.Vehicle.Any(p => p.RegNo.ToUpper() == vehicle.RegNo); // Jämför regnummer i databasen med inkommande.
 
@@ -463,7 +471,7 @@ namespace Garage3BL.Controllers
         public IActionResult Parking()
         {
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo");
-            ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo");
+            ViewData["RegNo"] = new SelectList(_context.Vehicle, "RegNo", "RegNo");
             return View();
         }
 
@@ -520,7 +528,7 @@ namespace Garage3BL.Controllers
             else
             {
                 ViewData["MemberId"] = new SelectList(_context.Member, "Id", "MemberNo", vehicle.MemberId);
-                ViewData["RegNo"] = new SelectList(_context.Vehicle, "Id", "RegNo", vehicle.RegNo);
+                ViewData["RegNo"] = new SelectList(_context.Vehicle, "RegNo", "RegNo", vehicle.RegNo);
                 Auxiliary.WarningReg = "Medlemmen eller regnumret finns inte...";
                 if (!flag1) Auxiliary.WarningReg = "Man måste vara minst 18 år för att kunna parkera...";
                 if (!flag4 && flag2 && flag3) Auxiliary.WarningReg = "Fordonet är redan parkerad...";
@@ -596,34 +604,6 @@ namespace Garage3BL.Controllers
                     item.Color = vehicle.Color;
                     item.Wheels = vehicle.Wheels;
                 }
-            }
-
-            var vehlist = _context.Member // Skriver över berörd post i fordonslistan tillhörande Member.
-                .Where(c => c.Id == vehicle.MemberId)
-                    .Select(c => new Member
-                    {
-                        Id = c.Id,
-                        Vehicles = c.Vehicles
-                    });
-
-            foreach (var item in vehlist)
-            {
-                item.Vehicles.Add(vehicle);
-            }
-
-            var vtylist = _context.Vtype // Skriver över berörd post i fordonslistan tillhörande Vtype.
-                .Where(c => c.Id == vehicle.VtypeId)
-                    .Select(c => new Vtype
-                    {
-                        Id = c.Id,
-                        Type = c.Type,
-                        Vehicles = c.Vehicles
-                    });
-
-            foreach (var item in vtylist)
-            {
-                vehicle.Type = item.Type;
-                item.Vehicles.Add(vehicle);
             }
 
             if (!vehicle.IsParked)

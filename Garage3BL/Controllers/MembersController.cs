@@ -57,7 +57,7 @@ namespace Garage3BL.Controllers
         }
 
         // GET: Members/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null || _context.Member == null)
             {
@@ -65,8 +65,18 @@ namespace Garage3BL.Controllers
             }
 
             Auxiliary.Reset(); // Raderar alla meddelanden.
-            var member = await _context.Member
-                .FirstOrDefaultAsync(m => m.Id == id);
+
+            var member = _context.Member // Detta är den enda konfigurationen som fungerar!
+                .Select(v => new Member
+                { 
+                    Id = v.Id,
+                    MemberNo = v.MemberNo,
+                    FirstName = v.FirstName,
+                    LastName = v.LastName,
+                    PersonalNo = v.PersonalNo,
+                    Vehicles= v.Vehicles,
+                }).FirstOrDefault(m => m.Id == id);
+
             if (member == null)
             {
                 return NotFound();
@@ -211,15 +221,10 @@ namespace Garage3BL.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             int tal = 0;
-            //var veh = _context.Vehicle // Först hämtas de fordon som tillhör em medlem.
-            //    .Where(v => v.MemberId == id);
 
-            foreach (var item in _context.Vehicle) // Filtrering av ev fordon. //Det enda sättet att frigöra korrekt PN är att iterera den.
+            foreach (var item in _context.Vehicle) // Filtrering av ev fordon.
             {
-                //foreach (var item2 in _context.Member) // Alla medlemmar kollas.
-                //{
-                    if (item.MemberId == id) tal++; // Har ägaren fordon som är registrerade?
-                //}
+                    if (item.MemberId == id) tal++; // Har ägaren fordon kvar som är registrerade?
             }
 
             var member = await _context.Member.FindAsync(id);

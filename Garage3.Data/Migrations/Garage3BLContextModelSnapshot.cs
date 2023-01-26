@@ -125,8 +125,6 @@ namespace Garage3.Data.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.HasIndex("VtypeId");
-
                     b.ToTable("Vehicle");
                 });
 
@@ -154,20 +152,9 @@ namespace Garage3.Data.Migrations
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Garage3.Core.Vtype", null)
-                        .WithMany("Vehicles")
-                        .HasForeignKey("VtypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Garage3.Core.Member", b =>
-                {
-                    b.Navigation("Vehicles");
-                });
-
-            modelBuilder.Entity("Garage3.Core.Vtype", b =>
                 {
                     b.Navigation("Vehicles");
                 });

@@ -15,6 +15,9 @@ namespace Garage3.Core
         [Display(Name = "Regnummer"), StringLength(15, ErrorMessage = "Ange ett korrekt värde"), Required(ErrorMessage = "Detta fält är obligatoriskt")]
         public string RegNo { get; set; } = string.Empty;
 
+        [Display(Name = "Fordonstyp")]
+        public string Type { get; set; } = string.Empty;
+
         [Display(Name = "Märke"), StringLength(25), Required(ErrorMessage = "Detta fält är obligatoriskt")]
         public string Brand { get; set; } = string.Empty;
 
@@ -40,23 +43,13 @@ namespace Garage3.Core
         public bool IsParked { get; set; }
 
         [Display(Name = "Intäkter")]
-        public int InCome { get; set; }
-
-        [Display(Name = "Fordonstyp")]
-        public string Type { get; set; } = string.Empty;
+        public int InCome { get; set; }       
 
         [Display(Name = "Ägare")]
         public string FullName { get; set; } = string.Empty;
 
         [Display(Name = "ID")]
         public string MemberNo { get; set; } = string.Empty;
-
-        // Navigation properties
-        //[Display(Name = "Fordonstyp")]
-        //public Vtype Vtype { get; set; } = new Vtype(); // 1. Bil, 2. Motorcykel, 3. Lastbil...- 6.
-
-        //[Display(Name = "Ägare")]
-        //public Member Members { get; set; } = new Member(); // Ägaren till fordonet.
 
         // Foreign keys
         [Display(Name = "Fordonstyp")]

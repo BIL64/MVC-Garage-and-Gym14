@@ -35,6 +35,57 @@
         </dd>
     </dl>
 </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Registrerade fordon
+            </th>
+            <th>
+                Fordonstyp
+            </th>
+            <th>
+                Fabrikat
+            </th>
+            <th>
+                Modell
+            </th>
+            <th>
+                P
+            </th>
+            <th>
+                P-ruta
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Vehicles)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vmodel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsParked)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Place)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 <div>
     <button type="button" class="aabutt"><a class="alink" asp-action="Edit" asp-route-id="@Model?.Id">Ändra</a></button>&nbsp;
     <button type="button" class="aabutt"><a class="alink" asp-action="Index">Gå tillbaka</a></button>
