@@ -55,8 +55,6 @@ namespace Garage3BL.Controllers
         // GET: Vehicles (ändring: Björn Lindqvist)
         public async Task<IActionResult> Index()
         {
-            List<Vehicle> vlist = new List<Vehicle>();
-
             if (Auxiliary.Start) // Görs bara första gången översikten körs.
             {
                 Auxiliary.Capacity = new string[Readfile2int("Config_cap.txt", 20)]; // Läser in variabler från filer.
@@ -130,22 +128,10 @@ namespace Garage3BL.Controllers
             }
 
             var vehicle = await _context.Vehicle.ToListAsync();
-            vlist.Clear();
 
             foreach (var item in vehicle)
             {
                 item.ParkedTime = Ptime(item.ArrivalTime); // För alla fordon ges P-tid.
-                vlist.Add(item); // Temporär lista för Vehicles.
-            }
-
-            var member = await _context.Member.ToListAsync();
-
-            foreach (var item in member) // Member.Vehicles tilldelas det som finns i den temporära listan.
-            {
-                foreach (var items in vlist)
-                {
-                    if (item.Id == items.MemberId) item.Vehicles.Add(items);
-                }
             }
 
             await _context.SaveChangesAsync();
