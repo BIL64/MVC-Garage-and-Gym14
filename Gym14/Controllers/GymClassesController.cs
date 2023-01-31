@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Gym14.Areas.Identity.Pages.Account.Manage;
 
 namespace Gym14.Controllers
 {
@@ -19,11 +20,16 @@ namespace Gym14.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userman;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<DeletePersonalDataModel> _logger;
 
-        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> UserManager)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> UserManager,
+            SignInManager<ApplicationUser> signInManager, ILogger<DeletePersonalDataModel> logger)
         {
             _context = context;
             this._userman = UserManager;
+            this._signInManager = signInManager;
+            this._logger = logger;
         }
 
         // GET: GymClasses
@@ -271,43 +277,6 @@ namespace Gym14.Controllers
             return View(gymClass);
         }
 
-        // Av Björn Lindqvist.
-        [AllowAnonymous]
-        public async Task<IActionResult> Memedit(string id)
-        {
-            if (id == null || _context.AppUser == null) return BadRequest();
-
-            var appUser = await _context.AppUser.FindAsync(id);
-
-            if (appUser == null) return BadRequest();
-
-            return View(appUser);
-        }
-
-        // Av Björn Lindqvist.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AllowAnonymous]
-        public async Task<IActionResult> Memedit(string id, [Bind("Id,FirstName,LastName,Email")] ApplicationUser applicationUser)
-        {
-            if (id != applicationUser.Id) return BadRequest();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(applicationUser);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                        return BadRequest();
-                }
-                return RedirectToAction(nameof(Memindex));
-            }
-            return View(applicationUser);
-        }
-
         // GET: GymClasses/Delete/5
         [AllowAnonymous]
         public async Task<IActionResult> Delete(int? id)
@@ -369,10 +338,16 @@ namespace Gym14.Controllers
             var appUser = await _context.AppUser.FindAsync(id);
             if (appUser != null)
             {
-                _context.AppUser.Remove(appUser);
+                var result = await _userman.DeleteAsync(appUser);
+                var userId = await _userman.GetUserIdAsync(appUser);
+                if (!result.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred deleting user.");
+                };
+
+                _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Memindex));
         }
 
