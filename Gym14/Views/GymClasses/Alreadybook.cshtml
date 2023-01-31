@@ -1,0 +1,36 @@
+﻿@model Gym14.Models.GymClass
+
+@{
+    ViewData["Title"] = "Alreadybook";
+}
+
+<h2>Members that are booked for this gym pass</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Booking members
+            </th>
+            <th>
+                E-mail
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Auxx.Userlist)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div>
+    <button type="button" class="aabutt"><a class="alink" asp-action="Index">Back to List</a></button>
+</div>

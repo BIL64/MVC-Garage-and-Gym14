@@ -23,6 +23,6 @@ namespace Garage3.Core
         public string PersonalNo { get; set; } = string.Empty;
 
         // Navigation properties
-        public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>(); // De fordon som medlemmarna äger.
+        public ICollection<Vehicle> Vehicles { get; set; } = new List<Vehicle>(); // De fordon som medlemmarna äger. Fylls i automatiskt...
     }
 }

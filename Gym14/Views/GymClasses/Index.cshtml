@@ -1,0 +1,105 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+
+@model IEnumerable<Gym14.Models.GymClass>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Gym Pass Topical</h2>
+
+<h4><i>Please book passes that fits you...</i></h4>
+<br />
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "GymClasses", new { area = "" })">        
+        <button id="logout" type="submit" class="btn btn-primary">Logout</button>
+        <b style="font-size: 20px; color:darkblue">Don't forget to log out when your booking is complete !</b>
+    </form>
+}
+
+<body>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                Book
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    bool flag = false;
+        <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Duration)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                @foreach (var i in @Auxx.Usergymlist) // Lista med users (medlemmar).
+                {
+                    if (item.Id == i.GymClassId) // Om passet stämmer med en medlems bokning.
+                    {
+                        <span style="font-weight: bold; color: red">Yes</span>
+                        flag = true;
+                    }                    
+                }
+                @if (!flag)
+                {
+                    <span>No</span>
+                }
+            }            
+        </td>
+        <td>
+            <button type="button" class="abutt"><a class="alink" asp-action="Booking_in" asp-route-id="@item.Id">BOOK THIS</a></button>&nbsp;
+            <button type="button" class="abutt"><a class="alink" asp-action="Booking_out" asp-route-id="@item.Id">UNDO THIS</a></button>&nbsp;
+            <button type="button" class="abutt"><a class="alink" asp-action="Alreadybook" asp-route-id="@item.Id">See who is booked</a></button>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
+
+    <h5 style="color: blue">@Auxx.Book_Yes</h5>
+    <h5 style="color: orangered">@Auxx.Book_No</h5>
+
+<script>
+    /*Nollställer vid utloggning. Går ej att flytta.*/
+
+    const comBut = document.getElementById('logout');
+    comBut.onmouseup = openSubmit;
+
+    function openSubmit() {
+    @{Auxx.Reset();}
+    }
+</script>
+
+</body>
+
+

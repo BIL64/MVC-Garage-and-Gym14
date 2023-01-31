@@ -1,0 +1,66 @@
+﻿@model Gym14.Models.GymClass
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>This gym pass</h2>
+
+<hr />
+<div>    
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Duration)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Duration)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>
+<div>
+    <button type="button" class="aabutt"><a class="alink" asp-action="Edit" asp-route-id="@Model?.Id">Edit</a></button>&nbsp;
+    <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to List</a></button>
+</div><br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Booking members
+            </th>
+            <th>
+                E-mail
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Auxx.Userlist)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>                
+            </tr>
+        }
+    </tbody>
+</table>
