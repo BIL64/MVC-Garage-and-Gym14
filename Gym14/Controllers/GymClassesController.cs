@@ -36,9 +36,9 @@ namespace Gym14.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var userId = _userman.GetUserId(User); // Alla medlemmar.
+            var userId = _userman.GetUserId(User); // Den för tillfället inloggades sträng-id. Yes/No.
 
-            var appgymclass = _context.AppGymClass // Söker bland sträng-id'n motsvarande gympass som det finns bokade medlemmar till.
+            var appgymclass = _context.AppGymClass // Söker bland gympass som är bokade av sträng-id.
                 .Where(v => v.ApplicationUserId == userId);
 
             Auxx.Usergymlist.Clear();

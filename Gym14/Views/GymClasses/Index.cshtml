@@ -62,9 +62,9 @@
         <td>
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                @foreach (var i in @Auxx.Usergymlist) // Lista med users (medlemmar).
+                @foreach (var i in @Auxx.Usergymlist) // Lista med gympass som är bokade av den inloggade.
                 {
-                    if (item.Id == i.GymClassId) // Om passet stämmer med en medlems bokning.
+                    if (item.Id == i.GymClassId) // Om passet är bokat av den inloggade.
                     {
                         <span style="font-weight: bold; color: red">Yes</span>
                         flag = true;
