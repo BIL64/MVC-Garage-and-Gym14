@@ -26,7 +26,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                <i>@Html.DisplayNameFor(model => model.Name)</i>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StartTime)
@@ -48,7 +48,7 @@
     bool flag = false;
         <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            <b style="color:darkred">@Html.DisplayFor(modelItem => item.Name)</b>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.StartTime)
@@ -96,7 +96,9 @@
     comBut.onmouseup = openSubmit;
 
     function openSubmit() {
-    @{Auxx.Reset();}
+    @{        
+        Auxx.Reset();
+    }
     }
 </script>
 

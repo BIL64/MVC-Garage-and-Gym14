@@ -23,9 +23,9 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.IsInRole("Administrators"))
-                                    {
+                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="GymClasses" asp-action="Create">Add, delete, edit or get info about a gym pass</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="GymClasses" asp-action="Create">Add, delete, edit or get info about gym pass/member</a>
                             </li>
                         }
                     </ul>
@@ -42,7 +42,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Gym14 - By Björn Lindqvist V1.1 (1.Seed saknas 2.Historik saknas 3.Test saknas)
+            &copy; 2023 - Gym14 - By Björn Lindqvist V1.2 (seed saknas, historik saknas, test saknas)
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym14.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230130211029_Init")]
+    [Migration("20230202085203_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -47,6 +47,9 @@ namespace Gym14.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRegistered")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .IsRequired()

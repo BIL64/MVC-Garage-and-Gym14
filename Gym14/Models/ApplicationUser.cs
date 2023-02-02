@@ -15,6 +15,8 @@ namespace Gym14.Models
 
         public string FullName => $"{FirstName} {LastName}";
 
+        public bool IsRegistered { get; set; } = false;
+
         public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; } = new List<ApplicationUserGymClass>();        
     }
 }

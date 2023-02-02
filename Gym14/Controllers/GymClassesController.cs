@@ -86,7 +86,7 @@ namespace Gym14.Controllers
             {
                 var booking = new ApplicationUserGymClass
                 {
-                    ApplicationUserId = userId, // Släcker man null i kopplingstabellen så addaeras nya appusers och gymklasser automagiskt.
+                    ApplicationUserId = userId, // Släcker man null i kopplingstabellen så adderas nya appusers och gymklasser automagiskt.
                     GymClassId = (int)id
                 };
                 _context.AppGymClass.Add(booking);
@@ -347,6 +347,29 @@ namespace Gym14.Controllers
 
                 _logger.LogInformation("User with ID '{UserId}' deleted themselves.", userId);
             }
+
+            return RedirectToAction(nameof(Memindex));
+        }
+
+        public ClaimsPrincipal GetUser()
+        {
+            return User;
+        }
+
+        // Av Björn Lindqvist.
+        [AllowAnonymous]
+        public async Task<IActionResult> Memreg(string id)
+        {
+            if (id == null || _context.AppUser == null) return BadRequest();
+
+            var appUser = await _context.AppUser
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (appUser == null) return BadRequest();
+
+            await _userman.AddToRoleAsync(appUser, "Members"); // Lägger till medlemsrollen till medlemmen. 
+            appUser.IsRegistered = true; // Görs bara en gång!
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Memindex));
         }

@@ -18,7 +18,10 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-image: url('../../Ketlebell.png');
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .abutt {
@@ -38,6 +41,13 @@ body {
     color: black;
 }
 
+.rlink {
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    color: red;
+}
+
 .aabutt {
     height: 30px;
     border-color: white;
@@ -46,10 +56,4 @@ body {
 
 .aabutt:hover {
     background-color: aliceblue;
-}
-
-body {
-    background-image: url('../../Ketlebell.jpg');
-    background-position: center;
-    background-repeat: no-repeat;
 }
