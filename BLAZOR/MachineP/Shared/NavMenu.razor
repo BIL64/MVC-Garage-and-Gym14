@@ -1,4 +1,14 @@
-﻿@*<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="navspace1">MACHINE-PARK</div>
+<div class="navspace2">
+    <NavLink href="fetchdata"><button type="button" class="butt1"><span class="oi oi-flash" aria-hidden="true"></span> All devices</button></NavLink>
+    </div>
+<div class="navspace3"><span class="navspan">@Date</span></div>
+
+@code{
+    private string Date = DateTime.UtcNow.ToString().Substring(0, DateTime.UtcNow.ToString().Length - 8);
+}
+
+@*<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">MachineP</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">

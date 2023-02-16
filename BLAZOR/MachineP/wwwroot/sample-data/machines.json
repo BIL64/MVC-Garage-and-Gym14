@@ -1,0 +1,44 @@
+﻿[
+  {
+    "id": "1",
+    "location": "The machine hall, Motala, Electrolux",
+    "date": "1977-05-05",
+    "type": "Sorting",
+    "status": true
+  },
+  {
+    "id": "2",
+    "location": "The production hall, Motala, Electrolux",
+    "date": "1981-03-24",
+    "type": "Manufacturing",
+    "status": true
+  },
+  {
+    "id": "3",
+    "location": "The production hall, Motala, Electrolux",
+    "date": "2018-11-10",
+    "type": "Manufacturing",
+    "status": true
+  },
+  {
+    "id": "4",
+    "location": "The production hall, Motala, Electrolux",
+    "date": "2019-08-28",
+    "type": "Manufacturing",
+    "status": false
+  },
+  {
+    "id": "5",
+    "location": "The warehouse, Motala, Electrolux",
+    "date": "2021-03-20",
+    "type": "Sorting",
+    "status": true
+  },
+  {
+    "id": "6",
+    "location": "The machine hall, Motala, Electrolux",
+    "date": "1985-01-07",
+    "type": "Manufacturing",
+    "status": false
+  }
+]

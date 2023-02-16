@@ -1,35 +1,42 @@
 ﻿@page "/fetchdata"
 @inject HttpClient Http
 
-<PageTitle>Weather forecast</PageTitle>
+<PageTitle>List of Devices</PageTitle>
 
-<h1>Weather forecast</h1>
+<h3>List of Devices</h3>
 
-<p>This component demonstrates fetching data from the server.</p>
-
-@if (forecasts == null)
+@if (mdata == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table tableP">
         <thead>
             <tr>
+                <th>ID</th>
+                <th>Location</th>
                 <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Type</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var data in mdata)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@data.id</td>
+                    <td>@data.Location</td>
+                    <td>@data.Date.ToShortDateString()</td>
+                    <td>@data.Type</td>
+                    @if (data.Status)
+                    {
+                        <td><span class="stat_on">In operation</span></td>
+                    }
+                    else
+                    {
+                        <td><span class="stat_off">Out of order</span></td>
+                    }
                 </tr>
             }
         </tbody>
@@ -37,21 +44,23 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private MachineData[]? mdata;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        mdata = await Http.GetFromJsonAsync<MachineData[]>("sample-data/machines.json");
     }
 
-    public class WeatherForecast
+    public class MachineData
     {
+        public string id { get; set; } = Guid.NewGuid().ToString("n");
+
+        public string Location { get; set; } = string.Empty;
+
         public DateOnly Date { get; set; }
 
-        public int TemperatureC { get; set; }
+        public string Type { get; set; } = string.Empty;
 
-        public string? Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public bool Status { get; set; }
     }
 }

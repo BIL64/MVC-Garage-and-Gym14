@@ -1,17 +1,16 @@
-nav {
+/*nav {
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     color: black;
     padding: 15px;
-    height: 3%;
+    height: 33px;
     border-radius: 10px;
 }
 
-article {
+main {
     font-family: Tahoma, Verdana, Segoe, sans-serif;
     color: #fff;
     padding: 15px;
-    margin-top: 3%;
-    height: 70%;
+    margin-top: 3%;    
     border-radius: 10px;
 }
 
@@ -20,28 +19,9 @@ article {
     display: flex;
 }
 
-.navspace1 {
-    text-align: center;
-    background-color: beige;
-    width: 200px;
-    padding: 4px;
-    border-radius: 7px;
-}
-
-.navspace2 {
-    text-align: center;
-    width: 45%;
-    padding: 4px;
-}
-
-.navspace3 {
-    text-align: right;
-    flex-grow: 1;
-    padding: 4px;
-}
-
 .area {
     background-color: white;
+    height: 70%;
     display: flex;
 }
 
@@ -59,8 +39,7 @@ article {
     flex-grow: 1;
     padding: 20px;
     border-radius: 10px;
-}
-
+}*/
 
 
 /*.page {

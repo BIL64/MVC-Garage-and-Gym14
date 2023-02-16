@@ -1,20 +1,17 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-#app {
-    height: 100%;
-    padding: 0;
-    margin: 0;
+* {
+    box-sizing: content-box;
 }
 
-.page {
-    height: 100%;
-    padding: 0;
-    margin: 0;
+#app {
+    height: 99%;
+    padding: 10px;
 }
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    height: 100%;
+    height: 98%;
     background-color: #ABA;
 }
 
@@ -113,3 +110,120 @@ a, .btn-link {
     .loading-progress-text:after {
         content: var(--blazor-load-percentage-text, "Loading");
     }
+
+@media only screen and (max-width: 800px) {
+    .space2 {
+        margin-top: 15px;
+    }
+}
+
+@media only screen and (min-width: 800px) {
+    .area {
+        display: flex;
+    }
+}
+
+nav {
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    color: black;
+    padding: 15px;
+    height: 33px;
+    border-radius: 10px;
+}
+
+main {
+    font-family: Tahoma, Verdana, Segoe, sans-serif;
+    color: #fff;
+    padding: 15px;
+    margin-top: 3%;
+    border-radius: 10px;
+}
+
+.navarea {
+    background-color: white;
+    display: flex;
+}
+
+.area {
+    background-color: white;
+}
+
+.space1 {
+    text-align: center;
+    background-color: #222;
+    width: 35%;
+    margin-right: 15px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.space2 {
+    background-color: #444;
+    flex-grow: 1;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+@media only screen and (max-width: 650px) {
+    .navspace1 {
+        letter-spacing: 1px;
+        width: 130px;
+    }
+    .navspan {
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (min-width: 650px) {
+    .navspace1 {
+        letter-spacing: 6px;
+        width: 200px;
+    }
+}
+
+.navspace1 {
+    text-align: center;
+    background-color: beige;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.navspace2 {
+    text-align: center;
+    width: 35%;
+    padding: 2px;
+}
+
+.navspace3 {
+    margin-left: auto;
+    margin-right: 0;
+    padding: 5px;
+}
+
+.navspan {
+    color: white;
+    background-color: burlywood;
+    padding: 5px;
+    border-radius: 7px;
+}
+
+.tableP {
+    color: white;
+}
+
+.butt1 {
+    width: 130px;
+    height: 25px;
+    border: 2px black solid;
+    border-radius: 18px;
+}
+
+.stat_on {
+    background-color: green;
+    border: 1px white solid;
+}
+
+.stat_off {
+    background-color: red;
+    border: 1px white solid;
+}

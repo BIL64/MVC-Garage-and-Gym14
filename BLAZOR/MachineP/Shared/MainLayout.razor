@@ -1,15 +1,22 @@
 ﻿@inherits LayoutComponentBase
+@*inject HttpClient Http*@
 
-    <nav class="navarea">
-        <div class="navspace1">M A C H I N E - P A R K</div>
-        <div class="navspace2">Text2</div>
-        <div class="navspace3">Text3</div>
-    </nav>
+<nav class="navarea">
+    <NavMenu />
+</nav>
 
-    <article class="area">
-        <div class="space1">Text1</div>
-        <div class="space2">Text2</div>
-    </article>
+<main class="area">
+    <div class="space1">Text1</div>
+    <div class="space2">@Body</div>
+</main>
+
+@*@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await Http.GetStreamAsync("counter");
+        StateHasChanged();
+    }
+}*@
 
 @*<div class="page">
     <div class="sidebar">
