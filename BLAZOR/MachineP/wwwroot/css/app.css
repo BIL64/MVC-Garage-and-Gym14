@@ -1,17 +1,8 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-* {
-    box-sizing: content-box;
-}
-
-#app {
-    height: 99%;
-    padding: 10px;
-}
-
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    height: 98%;
+    height: 98%; /*<-- egenhändig ändring*/
     background-color: #ABA;
 }
 
@@ -111,12 +102,25 @@ a, .btn-link {
         content: var(--blazor-load-percentage-text, "Loading");
     }
 
+/*Egenhändigt skrivna css-kommandon börjar här*/
+
+* {
+    box-sizing: content-box;
+}
+
+#app {
+    height: 99%;
+    padding: 10px;
+}
+
+/*Mobiltelefonanpassning*/
 @media only screen and (max-width: 800px) {
     .space2 {
         margin-top: 15px;
     }
 }
 
+/*Mobiltelefonanpassning*/
 @media only screen and (min-width: 800px) {
     .area {
         display: flex;
@@ -164,6 +168,7 @@ main {
     border-radius: 10px;
 }
 
+/*Mobiltelefonanpassning*/
 @media only screen and (max-width: 650px) {
     .navspace1 {
         letter-spacing: 1px;
@@ -174,6 +179,7 @@ main {
     }
 }
 
+/*Mobiltelefonanpassning*/
 @media only screen and (min-width: 650px) {
     .navspace1 {
         letter-spacing: 6px;

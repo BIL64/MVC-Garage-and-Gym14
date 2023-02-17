@@ -5,7 +5,7 @@
 <div class="navspace3"><span class="navspan">@Date</span></div>
 
 @code{
-    private string Date = DateTime.UtcNow.ToString().Substring(0, DateTime.UtcNow.ToString().Length - 8);
+    private string Date = DateTime.UtcNow.ToString().Substring(0, DateTime.UtcNow.ToString().Length - 8); // Tidsangivelsen avskils från datumet.
 }
 
 @*<div class="top-row ps-3 navbar navbar-dark">

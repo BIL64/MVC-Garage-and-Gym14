@@ -1,5 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@*inject HttpClient Http*@
 
 <nav class="navarea">
     <NavMenu />
@@ -9,14 +8,6 @@
     <div class="space1">Text1</div>
     <div class="space2">@Body</div>
 </main>
-
-@*@code {
-    protected override async Task OnInitializedAsync()
-    {
-        await Http.GetStreamAsync("counter");
-        StateHasChanged();
-    }
-}*@
 
 @*<div class="page">
     <div class="sidebar">
