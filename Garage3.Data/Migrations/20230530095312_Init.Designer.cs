@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Garage3.Data.Migrations
 {
     [DbContext(typeof(Garage3BLContext))]
-    [Migration("20230125205011_Init")]
+    [Migration("20230530095312_Init")]
     partial class Init
     {
         /// <inheritdoc />
