@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Garage3.Core;
 using Garage3BL.Data;
-using Microsoft.Data.SqlClient;
-using System.Reflection;
-using Microsoft.CodeAnalysis.Operations;
-using Newtonsoft.Json;
 
 namespace Garage3BL.Controllers
 {
@@ -38,10 +30,8 @@ namespace Garage3BL.Controllers
             int tal = 0;
             try
             {
-                using (var sr = new StreamReader(filename))
-                {
-                    tal = int.Parse(sr.ReadToEnd()); // Läser in en sträng som konverteras till en int.
-                }
+                using var sr = new StreamReader(filename);
+                tal = int.Parse(sr.ReadToEnd()); // Läser in en sträng som konverteras till en int.
             }
             catch (IOException e)
             {
@@ -265,7 +255,7 @@ namespace Garage3BL.Controllers
             if (subadd == "Lägg till ny fordonstyp" && newvehicle != "")
             {
                 vtype.Type = newvehicle;
-                _context.Add(vtype);
+                _context.Vtype.Add(vtype);
                 await _context.SaveChangesAsync();
                 return View("Plus");
             }
@@ -302,7 +292,7 @@ namespace Garage3BL.Controllers
         // POST: Vehicles/Create  (ändring: Björn Lindqvist)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Member member, Vehicle vehicle, Vtype vtype)
+        public async Task<IActionResult> Create(Vehicle vehicle)
         {
             var mem = _context.Member // Hämtar den medlem som äger fordonet från Member.
                 .Where(v => v.Id == vehicle.MemberId);
@@ -332,7 +322,7 @@ namespace Garage3BL.Controllers
 
             if (!flag)
             {
-                _context.Add(vehicle);
+                _context.Vehicle.Add(vehicle);
                 await _context.SaveChangesAsync();
                 ViewData["MemberId"] = new SelectList(_context.Member, "Id", "FullName", vehicle.MemberId);
                 ViewData["VtypeId"] = new SelectList(_context.Vtype, "Id", "Type", vehicle.VtypeId);
@@ -742,7 +732,7 @@ namespace Garage3BL.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Av Sorosh Farahmand och Björn Lindqvist
+        // Av Sorosh Farahmand (ombyggd av Björn Lindqvist)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Receipt(int id)

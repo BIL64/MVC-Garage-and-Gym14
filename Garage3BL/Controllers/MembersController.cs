@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Garage3.Core;
 using Garage3BL.Data;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace Garage3BL.Controllers
 {
@@ -97,7 +88,7 @@ namespace Garage3BL.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,MemberNo,FirstName,LastName,PersonalNo")] Member member)
+        public async Task<IActionResult> Create([Bind("MemberNo,FirstName,LastName,PersonalNo")] Member member)
         {            
             bool flag1 = false;
             if (member.FirstName.ToUpper() == member.LastName.ToUpper()) flag1 = true; // Är för- och efternamnet samma?
@@ -108,7 +99,7 @@ namespace Garage3BL.Controllers
             {
                 if (ModelState.IsValid)
                 {                                        
-                    _context.Add(member);
+                    _context.Member.Add(member);
                     await _context.SaveChangesAsync();
                     Auxiliary.Thanks4R = $"{member.FullName} är nu medlem i BL GARAGE !";                    
                     return RedirectToAction(nameof(Index));
