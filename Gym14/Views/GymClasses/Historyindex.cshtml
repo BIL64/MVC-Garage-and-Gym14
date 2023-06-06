@@ -1,0 +1,61 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@model IEnumerable<Gym14.Models.History>
+
+@{
+    ViewData["Title"] = "Historyindex";
+}
+
+<h2>History of members at Gym 14</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                E-mail
+            </th>
+            <th>
+                Phone number
+            </th>
+            <th>
+                Arrived date
+            </th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                @if (item.Rtype == 'A')
+                {
+                    <span style="color:darkred">@Html.DisplayFor(modelItem => item.Rtype)</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.Rtype)
+                }
+            </td>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+        </tr>
+    }
+</table>
+<div>
+    <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to List</a></button>
+</div>

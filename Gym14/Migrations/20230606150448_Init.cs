@@ -32,7 +32,8 @@ namespace Gym14.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsRegistered = table.Column<bool>(type: "bit", nullable: false),
+                    Rtype = table.Column<string>(type: "nvarchar(1)", nullable: false),
+                    Arrived = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -54,7 +55,7 @@ namespace Gym14.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GymClass",
+                name: "Gclass",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -66,7 +67,24 @@ namespace Gym14.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GymClass", x => x.Id);
+                    table.PrimaryKey("PK_Gclass", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hstory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rtype = table.Column<string>(type: "nvarchar(1)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hstory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,9 +210,9 @@ namespace Gym14.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AppGymClass_GymClass_GymClassId",
+                        name: "FK_AppGymClass_Gclass_GymClassId",
                         column: x => x.GymClassId,
-                        principalTable: "GymClass",
+                        principalTable: "Gclass",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -266,7 +284,10 @@ namespace Gym14.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "GymClass");
+                name: "Hstory");
+
+            migrationBuilder.DropTable(
+                name: "Gclass");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<ApplicationUser> SignInManager
 
 @model IEnumerable<Gym14.Models.ApplicationUser>
 
@@ -16,7 +15,13 @@
                 Booking members
             </th>
             <th>
+                Status
+            </th>
+            <th>
                 E-mail
+            </th>
+            <th>
+                Phone number
             </th>
         </tr>
     </thead>
@@ -25,28 +30,52 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
+                    @if (item.Rtype == 'A')
+                    {
+                        <span style="color:darkred">@Html.DisplayFor(modelItem => item.FullName)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    }
+                </td>
+                <td>
+                    @if (item.Rtype == 'A')
+                    {
+                        <span style="color:darkred">@Html.DisplayFor(modelItem => item.Rtype)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Rtype)
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                @if (!item.IsRegistered && item.LastName.ToUpper() != "ADMIN")
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                @if (item.Rtype == 'U')
                 {
-                       <button type="button" class="abutt"><a class="rlink" asp-action="Memreg" asp-route-id="@item.Id">Not Registered</a></button>                       
+                    <button type="button" class="abutt"><a class="rlink" asp-action="Memreg" title="To member!" asp-route-id="@item.Id">Not Registered</a></button>
+                    <button type="button" class="abutt"><a class="rlink" asp-action="Admreg" title="To administrator!" asp-route-id="@item.Id">A</a></button>
                 }
-                @if (item.LastName.ToUpper() != "ADMIN")
+                @if (item.Rtype == 'A')
                 {
-                       <button type="button" class="abutt"><a class="alink" asp-action="Memdelete" asp-route-id="@item.Id">Delete member</a></button>                       
-                }                 
+                    <button type="button" class="abutt"><a class="alink" asp-action="Memdelete" asp-route-id="@item.Id">Delete admin</a></button>
+                }
+                else
+                {
+                    <button type="button" class="abutt"><a class="alink" asp-action="Memdelete" asp-route-id="@item.Id">Delete member</a></button>
+                }    
                 </td>
             </tr>
         }
     </tbody>
 </table>
 Important!<br />
-In AspNetRoles: 1 = "Administrators" (ADMINISTRATORS), 2 = "Members" (MEMBERS).<br />
-The administrator's last name must always be "Admin".
+In AspNetRoles: 1 = "Administrators" (ADMINISTRATORS), 2 = "Members" (MEMBERS).
 <div>
     <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to List</a></button>
 </div>

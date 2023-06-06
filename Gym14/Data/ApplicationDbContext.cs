@@ -13,11 +13,13 @@ namespace Gym14.Data
         {
         }
 
-        public DbSet<GymClass> GymClass { get; set; } = default!;
+        public DbSet<GymClass> Gclass { get; set; } = default!;
 
         public DbSet<ApplicationUser> AppUser { get; set; } = default!;
 
         public DbSet<ApplicationUserGymClass> AppGymClass { get; set; } = default!;
+
+        public DbSet<History> Hstory { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

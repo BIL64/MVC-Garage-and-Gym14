@@ -15,7 +15,9 @@ namespace Gym14.Models
 
         public string FullName => $"{FirstName} {LastName}";
 
-        public bool IsRegistered { get; set; } = false;
+        public char Rtype { get; set; } = 'U';
+
+        public string Arrived { get; set; } = DateTime.Now.ToString().Substring(0, 10);
 
         public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; } = new List<ApplicationUserGymClass>();        
     }

@@ -35,6 +35,9 @@
                 @Html.DisplayNameFor(model => model.Duration)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
@@ -51,10 +54,13 @@
             <b style="color:darkred">@Html.DisplayFor(modelItem => item.Name)</b>
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
+            @Html.DisplayFor(modelItem => item.Start_Time)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Duration)
+            @Html.DisplayFor(modelItem => item.DurString)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.End_Time)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
@@ -62,7 +68,7 @@
         <td>
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                @foreach (var i in @Auxx.Usergymlist) // Lista med gympass som är bokade av den inloggade.
+                @foreach (var i in Auxx.Usergymlist) // Lista med gympass som är bokade av den inloggade.
                 {
                     if (item.Id == i.GymClassId) // Om passet är bokat av den inloggade.
                     {
@@ -74,9 +80,9 @@
                 {
                     <span>No</span>
                 }
-            }            
+            }
         </td>
-        <td>
+        <td style="border: none">
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_in" asp-route-id="@item.Id">BOOK THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_out" asp-route-id="@item.Id">UNDO THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Alreadybook" asp-route-id="@item.Id">See who is booked</a></button>
