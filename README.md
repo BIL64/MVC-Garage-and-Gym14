@@ -10,8 +10,8 @@ förstått så var den på förhand dömd att misslyckas. Vi saknade helt enkelt
 så löste det sig till sist, efter att sprinttiden förlängdes. Garage 3.0 ansåg de flesta i gänget vara den svåraste övningen hittills.
 Det var svårt fast lärorikt! Det tvingade oss att förstå och hantera MVC och databaser och detta var vi förstås tacksamma för!
 
-Övning 14 - Användarhantering för passbokning, tränade oss att bygga en MVC-applikation som jobbar med databaser med många-till-
-många förhållanden och som dessutom innefattar "Authentication Individual Accounts", som särskiljer på medlemmar och administratörer.
+Övning 14 - Användarhantering för passbokning, tränade oss i att bygga en MVC-applikation som jobbar med databaser med många-till-många
+förhållanden och som dessutom innefattar "Authentication Individual Accounts", som särskiljer på medlemmar och administratörer.
 Vid det här laget gick det lättare att sätta upp databaserna. Faktum var att när man väl fått kläm på hur identitetsramverket fungerade
 så flöt det på ganska fort. Det största problemet var att blanda inmatningsformulär med uppdaterbara tabeller på ett och samma ställe.
 Min lösning var att använda en statisk klass med statiska listor. Det verkade som att det enda som MVC tillät var statiska variabler
