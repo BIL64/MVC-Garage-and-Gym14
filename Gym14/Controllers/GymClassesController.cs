@@ -29,6 +29,8 @@ namespace Gym14.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            byte counter = 0;
+
             Auxx.HReset();
             var userId = _userman.GetUserId(User); // Den för tillfället inloggades sträng-id. Yes/No.
 
@@ -39,7 +41,11 @@ namespace Gym14.Controllers
             Auxx.Usergymlist = appgymclass.ToList(); // Lagrar endast bokade gympass i en statisk lista.
 
             Auxx.Historylist.Clear();
-            Auxx.Historylist = _context.Hstory.ToList(); // Hämtar alla rader i historiken.
+            foreach (var item in _context.Hstory)
+            {
+                if (counter < 3) Auxx.Historylist.Add(item); // Hämtar max tre poster i historiken.
+                counter++;
+            }
 
             var model = _context.Gclass // Förhindrar att utgångna gympass visas.
                 .Where(v => v.StartTime >= DateTime.Now);
