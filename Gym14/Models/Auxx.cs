@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Gym14.Models
+﻿namespace Gym14.Models
 {
     public static class Auxx
     {
@@ -9,6 +7,8 @@ namespace Gym14.Models
         public static ICollection<ApplicationUser> Userlist { get; set; } = new List<ApplicationUser>();
 
         public static ICollection<ApplicationUserGymClass> Usergymlist { get; set; } = new List<ApplicationUserGymClass>();
+
+        public static ICollection<History> Historylist { get; set; } = new List<History>();
 
         public static string Book_Yes { get; set; } = string.Empty;
 

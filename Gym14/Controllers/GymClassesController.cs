@@ -36,10 +36,10 @@ namespace Gym14.Controllers
                 .Where(v => v.ApplicationUserId == userId);
 
             Auxx.Usergymlist.Clear();
-            foreach (var item in appgymclass) // Lagrar endast bokade gympass i en statisk lista.
-            {
-                Auxx.Usergymlist.Add(item);
-            }
+            Auxx.Usergymlist = appgymclass.ToList(); // Lagrar endast bokade gympass i en statisk lista.
+
+            Auxx.Historylist.Clear();
+            Auxx.Historylist = _context.Hstory.ToList(); // Hämtar alla rader i historiken.
 
             var model = _context.Gclass // Förhindrar att utgångna gympass visas.
                 .Where(v => v.StartTime >= DateTime.Now);
@@ -203,10 +203,7 @@ namespace Gym14.Controllers
         public IActionResult Create()
         {
             Auxx.Gymlist.Clear();
-            foreach (var item in _context.Gclass) // Hämtar alla gympass.
-            {
-                Auxx.Gymlist.Add(item);
-            }
+            Auxx.Gymlist = _context.Gclass.ToList(); // Hämtar alla gympass.
 
             return View();
         }
@@ -220,10 +217,7 @@ namespace Gym14.Controllers
         public async Task<IActionResult> Create([Bind("Name,StartTime,Duration,Description")] GymClass gymClass)
         {
             Auxx.Gymlist.Clear();
-            foreach (var item in _context.Gclass) // Hämtar alla gympass inklusive den nyss skapade.
-            {
-                Auxx.Gymlist.Add(item);
-            }
+            Auxx.Gymlist = _context.Gclass.ToList(); // Hämtar alla gympass inklusive den nyss skapade.
 
             if (ModelState.IsValid)
             {

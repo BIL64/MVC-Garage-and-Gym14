@@ -42,7 +42,14 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Gym14 - By Björn Lindqvist V1.3 [Seedade lösenord: Admin = PassAdministrators@Word00! Medlem = PassMembers@Word00!]
+            @if (Auxx.Historylist.Count > 2)
+            {
+                <span>&copy; 2023 - Gym14 - By Björn Lindqvist V1.3</span>
+            }
+            else
+            {
+                <span>&copy; 2023 - Gym14 - By Björn Lindqvist V1.3 [Seeded passwords: Admin = PassAdministrators@Word00! Member = PassMembers@Word00!]</span>
+            }
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
