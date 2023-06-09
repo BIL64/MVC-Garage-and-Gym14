@@ -14,8 +14,8 @@
             <th>
                 Booking members
             </th>
-            <th>
-                Status
+            <th style="text-align: center">
+                USMA
             </th>
             <th>
                 E-mail
@@ -39,7 +39,7 @@
                         @Html.DisplayFor(modelItem => item.FullName)
                     }
                 </td>
-                <td>
+                <td style="text-align: center">
                     @if (item.Rtype == 'A')
                     {
                         <span style="color:darkred">@Html.DisplayFor(modelItem => item.Rtype)</span>
@@ -74,7 +74,7 @@
         }
     </tbody>
 </table>
-Important!<br />
+U = Un registered, S = Seeded, M = Member, and A = Administrator.<br />
 In AspNetRoles: "Administrators" (ADMINISTRATORS), "Members" (MEMBERS).
 <div>
     <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to List</a></button>
