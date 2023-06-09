@@ -12,7 +12,7 @@
             <th>
                 Name
             </th>
-            <th style="text-align: center">
+            <th class="cdel">
                 USMA
             </th>
             <th>
@@ -29,10 +29,10 @@
     @foreach (var item in Model)
     {
         <tr>
-            <td style="border: none; font-size: 11px; line-height: 0">
+            <td class="sdel">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0; text-align: center">
+            <td class="sdel cdel">
                 @if (item.Rtype == 'A')
                 {
                     <span style="color:darkred">@Html.DisplayFor(modelItem => item.Rtype)</span>
@@ -42,21 +42,21 @@
                     @Html.DisplayFor(modelItem => item.Rtype)
                 }
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0">
+            <td class="sdel">
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0">
+            <td class="sdel">
                 @Html.DisplayFor(modelItem => item.Phone)
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0">
+            <td class="sdel">
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0">
-                <a style="font-weight: bold; text-decoration: none; color: orangered" title="Delete this post?" asp-action="Historydelete" asp-route-id="@item.Id">X</a>
+            <td class="sdel">
+                <a class="hdel" title="Delete this post?" asp-action="Historydelete" asp-route-id="@item.Id">X</a>
             </td>
         </tr>
     }
 </table>
 <div>
-    <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to List</a></button>
+    <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to list</a></button>
 </div>
