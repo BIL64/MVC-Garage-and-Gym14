@@ -29,26 +29,20 @@ namespace Gym14.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            byte counter = 0;
-
             Auxx.HReset();
             var userId = _userman.GetUserId(User); // Den för tillfället inloggades sträng-id. Yes/No.
 
             var appgymclass = _context.AppGymClass // Söker bland gympass som är bokade av sträng-id.
-                .Where(v => v.ApplicationUserId == userId);
+                .Where(g => g.ApplicationUserId == userId);
 
             Auxx.Usergymlist.Clear();
             Auxx.Usergymlist = appgymclass.ToList(); // Lagrar endast bokade gympass i en statisk lista.
 
-            Auxx.Historylist.Clear();
-            foreach (var item in _context.Hstory)
-            {
-                if (counter < 3) Auxx.Historylist.Add(item); // Hämtar max tre poster i historiken.
-                counter++;
-            }
+            Auxx.Chist = 0;
+            foreach (var item in _context.Hstory) Auxx.Chist++;
 
             var model = _context.Gclass // Förhindrar att utgångna gympass visas.
-                .Where(v => v.StartTime >= DateTime.Now);
+                .Where(g => g.StartTime >= DateTime.Now);
 
             return View(model);
         }
@@ -128,7 +122,7 @@ namespace Gym14.Controllers
             var attending = await _context.AppGymClass.FindAsync(userId, id);
 
             var isnotbook = _context.Gclass
-                    .Where(b => b.Id == id);
+                    .Where(u => u.Id == id);
 
             if (attending == null)
             {
@@ -160,7 +154,7 @@ namespace Gym14.Controllers
             if (id == null || _context.Gclass == null) return BadRequest();
 
             var appgymclass = _context.AppGymClass // Gympasset med detta id hämtas.
-                .Where(v => v.GymClassId == id);
+                .Where(g => g.GymClassId == id);
 
             Auxx.Userlist.Clear();
             foreach (var item in appgymclass) // Söker efter medlemmar som är bokade på detta gympass.
@@ -185,7 +179,7 @@ namespace Gym14.Controllers
             if (id == null || _context.Gclass == null) return BadRequest();
 
             var appgymclass = _context.AppGymClass // Gympasset med detta id hämtas.
-                .Where(v => v.GymClassId == id);
+                .Where(g => g.GymClassId == id);
 
             Auxx.Userlist.Clear();
             foreach (var item in appgymclass) // Söker efter medlemmar som är bokade på detta gympass.
@@ -342,7 +336,7 @@ namespace Gym14.Controllers
             if (id == null || _context.Gclass == null) return BadRequest();
 
             var gymClass = await _context.Gclass
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(g => g.Id == id);
 
             if (gymClass == null) return BadRequest();
 
@@ -391,7 +385,7 @@ namespace Gym14.Controllers
         {
             if (_context.AppUser == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.GymClass'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.ApplicationUser'  is null.");
             }
             var appUser = await _context.AppUser.FindAsync(id);
             if (appUser != null)
@@ -407,6 +401,40 @@ namespace Gym14.Controllers
             }
 
             return RedirectToAction(nameof(Memindex));
+        }
+
+        //Av Björn Lindqvist.
+        [AllowAnonymous]
+        public async Task<IActionResult> Historydelete(int? id)
+        {
+            if (_context.Hstory == null) return BadRequest();
+
+            var history = await _context.Hstory
+                .FirstOrDefaultAsync(h => h.Id == id);
+
+            if (history == null) return BadRequest();
+
+            return View(history);
+        }
+
+        // Av Björn Lindqvist.
+        [HttpPost, ActionName("Historydelete")]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> HistorydeleteConfirmed(int id)
+        {
+            if (_context.Hstory == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.History'  is null.");
+            }
+            var history = await _context.Hstory.FindAsync(id);
+            if (history != null)
+            {
+                _context.Hstory.Remove(history);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Historyindex));
         }
 
         public ClaimsPrincipal GetUser()
@@ -452,7 +480,7 @@ namespace Gym14.Controllers
 
         private bool GymClassExists(int id)
         {
-          return (_context.Gclass?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Gclass?.Any(g => g.Id == id)).GetValueOrDefault();
         }
     }
 }

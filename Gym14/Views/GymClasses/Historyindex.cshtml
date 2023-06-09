@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-
-@model IEnumerable<Gym14.Models.History>
+﻿@model IEnumerable<Gym14.Models.History>
 
 @{
     ViewData["Title"] = "Historyindex";
@@ -15,7 +13,7 @@
                 Name
             </th>
             <th>
-                Status
+                USMA
             </th>
             <th>
                 E-mail
@@ -34,7 +32,7 @@
             <td style="border: none; font-size: 11px; line-height: 0">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td style="border: none; font-size: 11px; line-height: 0">
+            <td style="border: none; font-size: 11px; line-height: 0; text-align: center">
                 @if (item.Rtype == 'A')
                 {
                     <span style="color:darkred">@Html.DisplayFor(modelItem => item.Rtype)</span>
@@ -52,6 +50,9 @@
             </td>
             <td style="border: none; font-size: 11px; line-height: 0">
                 @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td style="border: none; font-size: 11px; line-height: 0">
+                <a style="font-weight: bold; text-decoration: none; color: orangered" title="Delete this post?" asp-action="Historydelete" asp-route-id="@item.Id">X</a>
             </td>
         </tr>
     }

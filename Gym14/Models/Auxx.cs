@@ -8,8 +8,6 @@
 
         public static ICollection<ApplicationUserGymClass> Usergymlist { get; set; } = new List<ApplicationUserGymClass>();
 
-        public static ICollection<History> Historylist { get; set; } = new List<History>();
-
         public static string Book_Yes { get; set; } = string.Empty;
 
         public static string Book_No { get; set; } = string.Empty;
@@ -17,6 +15,8 @@
         public static string History { get; set; } = "History";
 
         public static char Cwidth { get; set; } = '4';
+
+        public static byte Chist { get; set; }
 
         public static void Reset()
         {
