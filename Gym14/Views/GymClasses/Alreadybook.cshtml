@@ -1,4 +1,4 @@
-﻿@model Gym14.Models.GymClass
+﻿@model Gym14.Models.ApplicationUser
 
 @{
     ViewData["Title"] = "Alreadybook";
@@ -10,10 +10,10 @@
     <thead>
         <tr>
             <th>
-                Booking members
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                E-mail
+                @Html.DisplayNameFor(model => model.Email)
             </th>
         </tr>
     </thead>
