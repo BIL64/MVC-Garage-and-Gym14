@@ -2,9 +2,16 @@
 
 @{
     ViewData["Title"] = "Memdelete";
-}
 
-<h2>Delete this member</h2>
+    if (Model.Rtype == 'A')
+    {
+        <h2>Delete this administrator</h2>
+    }
+    else
+    {
+        <h2>Delete this member</h2>
+    }
+}
 
 <hr />
 <div>
