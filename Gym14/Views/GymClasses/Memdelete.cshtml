@@ -3,13 +3,23 @@
 @{
     ViewData["Title"] = "Memdelete";
 
-    if (Model.Rtype == 'A')
+    switch (Model.Rtype)
     {
-        <h2>Delete this administrator</h2>
-    }
-    else
-    {
-        <h2>Delete this member</h2>
+        case 'U' :
+            <h2>Delete this unregistered member</h2>
+            break;
+        case 'S':
+            <h2>Delete this seeded member</h2>
+            break;
+        case 'M':
+            <h2>Delete this member</h2>
+            break;
+        case 'A':
+            <h2>Delete this administrator</h2>
+            break;
+        default:
+            <h2>Delete this member...</h2>
+            break;
     }
 }
 
