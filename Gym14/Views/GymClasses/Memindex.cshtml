@@ -13,8 +13,8 @@
             <th>
                 Name
             </th>
-            <th class="cdel">
-                @Html.DisplayNameFor(model => model.Rtype)
+            <th class="cdel" title="U = Unregistered, S = Seeded, M = Member, and A = Administrator">
+                <span>@Html.DisplayNameFor(model => model.Rtype)</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -73,8 +73,9 @@
         }
     </tbody>
 </table>
-U = Unregistered, S = Seeded, M = Member, and A = Administrator.<br />
-In AspNetRoles: "Administrators" (ADMINISTRATORS), "Members" (MEMBERS).
+<ul>
+    <li title="In AspNetRoles: “Administrators” (ADMINISTRATORS), “Members” (MEMBERS)"></li>
+</ul>
 <div>
     <button type="button" class="aabutt"><a class="alink" asp-action="Create">Back to list</a></button>
 </div>
