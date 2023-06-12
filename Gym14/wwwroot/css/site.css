@@ -57,6 +57,10 @@ body {
     background-color: aliceblue;
 }
 
+.dmark {
+    background-color: rgb(225, 0, 225, 0.3);
+}
+
 .sdel {
     border: none;
     font-size: 11px;

@@ -48,8 +48,11 @@
     <tbody>
 @foreach (var item in Model)
 {
+    @if (item.StartTime.ToString().Substring(5, 2) == DateTime.Now.ToString().Substring(5, 2) &&
+         item.StartTime.ToString().Substring(9, 2) == DateTime.Now.ToString().Substring(9, 2)) Auxx.Class = "dmark";
+         else Auxx.Class = "";
     bool flag = false;
-        <tr>
+        <tr class="@Auxx.Class">
         <td>
             <b style="color:darkred">@Html.DisplayFor(modelItem => item.Name)</b>
         </td>
@@ -82,7 +85,7 @@
                 }
             }
         </td>
-        <td style="border: none">
+        <td style="border: none; background-color: white">
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_in" asp-route-id="@item.Id">BOOK THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_out" asp-route-id="@item.Id">UNDO THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Alreadybook" asp-route-id="@item.Id">See who is booked</a></button>
