@@ -49,10 +49,11 @@
 @foreach (var item in Model)
 {
     @if (item.StartTime.ToString().Substring(5, 2) == DateTime.Now.ToString().Substring(5, 2) &&
-         item.StartTime.ToString().Substring(9, 2) == DateTime.Now.ToString().Substring(9, 2)) Auxx.Class = "dmark";
-         else Auxx.Class = "";
+         item.StartTime.ToString().Substring(8, 2) == DateTime.Now.ToString().Substring(8, 2)) Auxx.Class = "dmark";
+    else Auxx.Class = "";
     bool flag = false;
-        <tr class="@Auxx.Class">
+
+    <tr class="@Auxx.Class">
         <td>
             <b style="color:darkred">@Html.DisplayFor(modelItem => item.Name)</b>
         </td>
