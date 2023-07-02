@@ -4,11 +4,11 @@
 Garage 3.0 var det mest komplicerade garaget av samtliga garage under vår kurstid i Lexicon. Det har förutom tidigare funktioner
 även många andra som rör kostnadshantering, såsom bonus, pro- och guld. Dessa styrs av ålder och hur mycket man använder garaget.
 Även intäktshantering i form av fasta och rörliga intäkter, statistik osv. Andra tips på finesser var olika sökfunktioner,
-paginering och datafiler för lagring av storheter och fasta priser etc. Allt detta var omöjligt att hinna göra på en vecka. Bara att
-sätta sig in i hur databaserna fungerade var tillräckligt svårt. Vi fick vårat ER-diagram godkänt den först dagen men av vad jag har
-förstått så var den på förhand dömd att misslyckas. Vi saknade helt enkelt kunskaperna. Men efter mycket fnulande och funderande
-så löste det sig till sist, efter att sprinttiden förlängdes. Garage 3.0 ansåg de flesta i gänget vara den svåraste övningen hittills.
-Det var svårt fast lärorikt! Det tvingade oss att förstå och hantera MVC och databaser och detta var vi förstås tacksamma för!
+paginering, datafiler för lagring av storheter och fasta priser etc. Allt detta var omöjligt att hinna göra på en vecka. Bara att
+sätta sig in i hur databaserna fungerade var tillräckligt knixigt. Första dagen fick min grupp ER-diagrammet godkänt, men av vad jag
+förstått så var det på förhand dömt att misslyckas. Vi saknade helt enkelt kunskaperna. Men efter mycket fnulande och funderande
+så löste det sig till sist, efter att sprinttiden förlängdes. Garage 3.0 ansåg de flesta i gänget vara den mest avancerade övningen
+hittills. Det var svårt fast lärorikt! Det tvingade oss att förstå och hantera MVC och databaser och detta var vi förstås tacksamma för!
 
 Övning 14 - Användarhantering för passbokning, tränade oss i att bygga en MVC-applikation som jobbar med databaser med många-till-många
 förhållanden och som dessutom innefattar "Authentication Individual Accounts", som särskiljer på medlemmar och administratörer.
