@@ -83,7 +83,7 @@ namespace Gym14.Data
             await userManager.AddToRoleAsync(admin, title);
         }
 
-            private static async Task GenerateAdmin(string fname, string lname, string phone, string title, string email, string pass)
+        private static async Task GenerateAdmin(string fname, string lname, string phone, string title, string email, string pass)
         {
             var admin = new ApplicationUser
             {

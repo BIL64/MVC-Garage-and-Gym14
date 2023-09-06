@@ -41,10 +41,16 @@ namespace Gym14.Controllers
             Auxx.Chist = 0;
             foreach (var item in _context.Hstory) Auxx.Chist++;
 
-            var model = _context.Gclass // Förhindrar att utgångna gympass visas.
-                .Where(g => g.StartTime >= DateTime.Now);
+            List<GymClass> passes = new();
 
-            return View(model);
+            foreach (var pas in _context.Gclass) // Förhindrar att utgångna gympass visas.
+            {
+                double timmar = double.Parse(pas.Duration.ToString()[..2]);
+                double minuter = double.Parse(pas.Duration.ToString()[3..5]);
+                if (pas.StartTime.AddMinutes(timmar * 60 + minuter) > DateTime.Now) passes.Add(pas);
+            }
+
+            return View(passes);
         }
 
         [AllowAnonymous]
@@ -243,11 +249,11 @@ namespace Gym14.Controllers
                 isreg = false;
                 isphone = false;
 
-                var hist = new History();
-
-                // För att posta (Add).
-                hist.Name = $"{item.FirstName} {item.LastName}";
-                hist.Rtype = item.Rtype;
+                var hist = new History // För att posta (Add).
+                {
+                    Name = $"{item.FirstName} {item.LastName}",
+                    Rtype = item.Rtype
+                };
                 if (item.Email is not null) hist.Email = item.Email; else hist.Email = "-";
                 if (item.PhoneNumber is not null) hist.Phone = item.PhoneNumber; else hist.Phone = "-";
                 if (item.Arrived is not null) hist.Date = item.Arrived; else hist.Date = "-";
