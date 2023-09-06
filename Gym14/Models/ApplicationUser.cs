@@ -22,6 +22,6 @@ namespace Gym14.Models
         [Display(Name = "Arrived date")]
         public string Arrived { get; set; } = DateTime.Now.ToString().Substring(0, 10);
 
-        public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; } = new List<ApplicationUserGymClass>();        
+        //public ICollection<ApplicationUserGymClass> AttendedClasses { get; set; } = new List<ApplicationUserGymClass>();        
     }
 }
