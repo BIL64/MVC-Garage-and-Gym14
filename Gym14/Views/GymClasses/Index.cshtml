@@ -5,6 +5,8 @@
 
 @{
     ViewData["Title"] = "Index";
+    string class4CSS = string.Empty;
+    string styledata = string.Empty;
 }
 
 <h2>Gym Pass Topical</h2>
@@ -48,12 +50,27 @@
     <tbody>
 @foreach (var item in Model)
 {
-    @if (item.StartTime.ToString().Substring(5, 2) == DateTime.Now.ToString().Substring(5, 2) &&
-         item.StartTime.ToString().Substring(8, 2) == DateTime.Now.ToString().Substring(8, 2)) Auxx.Class = "dmark";
-    else Auxx.Class = "";
+    // Markerar ett pass som ska genomföras under dagen.
+    if (item.StartTime.ToString()[5..7] == DateTime.Now.ToString()[5..7] &&
+         item.StartTime.ToString()[8..10] == DateTime.Now.ToString()[8..10]) class4CSS = "dmark";
+    else class4CSS = "";
+
+    // Åstadkommer en ram runt det pass som för stunden pågår, innan det plockas bort från listan.
+    int timmar = int.Parse(item.StartTime.ToString()[11..13]);
+    int minuter = int.Parse(item.StartTime.ToString()[14..16]);
+    int hournow = int.Parse(DateTime.Now.ToString()[11..13]);
+    int minutenow = int.Parse(DateTime.Now.ToString()[14..16]);
+
+    if (class4CSS == "dmark" && (timmar * 60 + minuter) <= (hournow * 60 + minutenow))
+    {
+        class4CSS = "onmark";
+        styledata = "";
+    }
+    else styledata = "border: none; background-color: white";
+
     bool flag = false;
 
-    <tr class="@Auxx.Class">
+    <tr class="@class4CSS">
         <td>
             <b style="color:darkred">@Html.DisplayFor(modelItem => item.Name)</b>
         </td>
@@ -72,7 +89,7 @@
         <td>
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                @foreach (var i in Auxx.Usergymlist) // Lista med gympass som är bokade av den inloggade.
+                foreach (var i in Auxx.Usergymlist) // Lista med gympass som är bokade av den inloggade.
                 {
                     if (item.Id == i.GymClassId) // Om passet är bokat av den inloggade.
                     {
@@ -80,13 +97,13 @@
                         flag = true;
                     }                    
                 }
-                @if (!flag)
+                if (!flag)
                 {
                     <span>No</span>
                 }
             }
         </td>
-        <td style="border: none; background-color: white">
+        <td style="@styledata">
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_in" asp-route-id="@item.Id">BOOK THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Booking_out" asp-route-id="@item.Id">UNDO THIS</a></button>&nbsp;
             <button type="button" class="abutt"><a class="alink" asp-action="Alreadybook" asp-route-id="@item.Id">See who is booked</a></button>

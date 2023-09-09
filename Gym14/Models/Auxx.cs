@@ -12,8 +12,6 @@
 
         public static string Book_No { get; set; } = string.Empty;
 
-        public static string Class { get; set; } = string.Empty;
-
         public static string History { get; set; } = "History";
 
         public static char Cwidth { get; set; } = '4';

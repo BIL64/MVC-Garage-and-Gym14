@@ -96,8 +96,8 @@ namespace Gym14.Controllers
             {
                 var booking = new ApplicationUserGymClass
                 {
-                    ApplicationUserId = userId, // Släcker man null i kopplingstabellen så adderas nya appusers och gymklasser automagiskt.
-                    GymClassId = (int)id
+                    ApplicationUserId = userId, // Släcker man null i kopplingstabellen  (utan att använda ?)
+                    GymClassId = (int)id        // så adderas nya appusers och gymklasser automagiskt.
                 };
                 _context.AppGymClass.Add(booking);
                 await _context.SaveChangesAsync();

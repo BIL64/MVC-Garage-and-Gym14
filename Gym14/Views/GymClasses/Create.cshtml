@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    bool passout = false;
 }
 
 <h2>Add new gym pass</h2>
@@ -65,21 +66,57 @@
     <tbody>
         @foreach (var item in Auxx.Gymlist)
         {
+            if (item.EndTime < DateTime.Now) passout = true;
             <tr>
                 <td>
-                    <b>@Html.DisplayFor(modelItem => item.Name)</b>
+                    @if (passout)
+                    {
+                        <b style="color: lightgray">@Html.DisplayFor(modelItem => item.Name)</b>
+                    }
+                    else
+                    {
+                        <b>@Html.DisplayFor(modelItem => item.Name)</b>
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Start_Time)
+                    @if (passout)
+                    {
+                        <span style="color: gray">@Html.DisplayFor(modelItem => item.Start_Time)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Start_Time)
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DurString)
+                    @if (passout)
+                    {
+                        <span style="color: lightgray">@Html.DisplayFor(modelItem => item.DurString)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.DurString)
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.End_Time)
+                    @if (passout)
+                    {
+                        <span style="color: lightgray">@Html.DisplayFor(modelItem => item.End_Time)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.End_Time)
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @if (passout)
+                    {
+                        <span style="color: lightgray">@Html.DisplayFor(modelItem => item.Description)</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Description)
+                    }
                 </td>
                 <td style="border: none">
                     <button type="button" class="abutt"><a class="alink" asp-action="Edit" asp-route-id="@item.Id">Edit</a></button>
@@ -87,6 +124,7 @@
                     <button type="button" class="abutt"><a class="alink" asp-action="Delete" asp-route-id="@item.Id">Delete</a></button>
                 </td>
             </tr>
+            passout = false;
         }
     </tbody>
 </table>

@@ -61,6 +61,11 @@ body {
     background-color: rgb(225, 0, 225, 0.1);
 }
 
+.onmark {
+    border: 3px ridge gray;
+    background-color: rgb(225, 0, 225, 0.3);
+}
+
 .sdel {
     border: none;
     font-size: 11px;
